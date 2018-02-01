@@ -5,7 +5,6 @@ namespace Domain
 {
     public class Contractor
     {
-        public List<Offer> ineligibleOffers = new List<Offer>();
         private int type2;
         private int type3;
         private int type5;
@@ -44,11 +43,7 @@ namespace Domain
         public int Type5PledgedAmount { get; set; }
         public int Type6PledgedAmount { get; set; }
         public int Type7PledgedAmount { get; set; }
-        public string TryParseValueType2PledgedVehicles { get; set; }
-        public string TryParseValueType3PledgedVehicles { get; set; }
-        public string TryParseValueType5PledgedVehicles { get; set; }
-        public string TryParseValueType6PledgedVehicles { get; set; }
-        public string TryParseValueType7PledgedVehicles { get; set; }
+
         public int NumberOfWonType2Offers { get; private set; }
         public int NumberOfWonType3Offers { get; private set; }
         public int NumberOfWonType5Offers { get; private set; }
@@ -57,55 +52,39 @@ namespace Domain
 
         public void AddWonOffer(Offer offer)
         {
-            bool alreadyOnTheList = winningOffers.Any(item => item.OfferReferenceNumber == offer.OfferReferenceNumber);
-            if (!alreadyOnTheList)
+            Offer offerOnWinningList =
+                winningOffers.Find(item => item.OfferReferenceNumber == offer.OfferReferenceNumber);
+
+            if (offerOnWinningList == null)
             {
                 winningOffers.Add(offer);
             }
             else
             {
-                foreach (Offer winOffer in winningOffers)
-                {
-                    if (winOffer.OfferReferenceNumber == offer.OfferReferenceNumber)
-                    {
-                        winOffer.IsEligible = true;
-                    }
-                }
+                offerOnWinningList.IsEligible = true;
             }
         }
 
         public List<Offer> ReturnIneligibleOffers()
         {
-            List<Offer> InEligibleOffersToReturn = new List<Offer>();
-            foreach (Offer offer in winningOffers)
-            {
-                if (!offer.IsEligible)
-                {
-                    InEligibleOffersToReturn.Add(offer);
-                }
-            }
+            //List<Offer> inEligibleOffersToReturn = new List<Offer>();
+            //foreach (Offer offer in winningOffers)
+            //{
+            //    if (!offer.IsEligible)
+            //    {
+            //        inEligibleOffersToReturn.Add(offer);
+            //    }
+            //}
 
-            return InEligibleOffersToReturn;
+            //return inEligibleOffersToReturn;
+            return winningOffers.Where(offer => offer.IsEligible == false).ToList();
         }
 
         public void RemoveIneligibleOffersFromWinningOffers()
         {
-            List<Offer> toBeRemoved = new List<Offer>();
-            foreach (Offer offer in winningOffers)
+            foreach (Offer offer in ReturnIneligibleOffers())
             {
-                if (!offer.IsEligible)
-                {
-                    ineligibleOffers.Add(offer);
-                    toBeRemoved.Add(offer);
-                }
-            }
-
-            if (toBeRemoved.Count > 0)
-            {
-                foreach (Offer offer in toBeRemoved)
-                {
-                    winningOffers.Remove(offer);
-                }
+                winningOffers.Remove(offer);
             }
         }
 
