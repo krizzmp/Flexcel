@@ -151,7 +151,7 @@ namespace DataAccess
                   .Select(x => x.Split(';'))
                   .Select(x => new Contractor
                   {
-                      ReferenceNumberBasicInformationPDF = x[0],
+                      BasicInfoRef = x[0],
                       ManagerName = x[1],
                       CompanyName = x[2],
                       UserID = x[3],        
@@ -176,7 +176,7 @@ namespace DataAccess
                             c.NumberOfType6PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType6PledgedVehicles);
                             c.NumberOfType7PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType7PledgedVehicles);
 
-                            Contractor newContractor = new Contractor(c.ReferenceNumberBasicInformationPDF, c.UserID, c.CompanyName, c.ManagerName, c.NumberOfType2PledgedVehicles, c.NumberOfType3PledgedVehicles, c.NumberOfType5PledgedVehicles, c.NumberOfType6PledgedVehicles, c.NumberOfType7PledgedVehicles);
+                            Contractor newContractor = new Contractor(c.BasicInfoRef, c.UserID, c.CompanyName, c.ManagerName, c.NumberOfType2PledgedVehicles, c.NumberOfType3PledgedVehicles, c.NumberOfType5PledgedVehicles, c.NumberOfType6PledgedVehicles, c.NumberOfType7PledgedVehicles);
                             listOfContractors.Add(newContractor);
                         }
                     }

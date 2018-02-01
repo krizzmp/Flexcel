@@ -21,12 +21,12 @@ namespace Domain
         }
 
         public Contractor(
-            string referenceNumberBasicInformationPDF, string userId, string companyName,
+            string basicInfoRef, string userId, string companyName,
             string managerName, int numberOfType2PledgedVehicles, int numberOfType3PledgedVehicles,
             int numberOfType5PledgedVehicles,
             int numberOfType6PledgedVehicles, int numberOfType7PledgedVehicles) : this()
         {
-            ReferenceNumberBasicInformationPDF = referenceNumberBasicInformationPDF;
+            BasicInfoRef = basicInfoRef;
             UserID = userId;
             CompanyName = companyName;
             ManagerName = managerName;
@@ -37,7 +37,7 @@ namespace Domain
             NumberOfType7PledgedVehicles = numberOfType7PledgedVehicles;
         }
 
-        public string ReferenceNumberBasicInformationPDF { get; set; }
+        public string BasicInfoRef { get; set; }
         public string UserID { get; set; }
         public string CompanyName { get; set; }
         public string ManagerName { get; set; }
