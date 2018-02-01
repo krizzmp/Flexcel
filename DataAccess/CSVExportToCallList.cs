@@ -48,7 +48,7 @@ namespace DataAccess
                         if (!offersToPrint.Any(obj => obj.UserID == offer.UserID))
                         {
                             offersToPrint.Add(offer);
-                            streamWriter.WriteLine(offer.OfferReferenceNumber + ";" + offer.Contractor.CompanyName + ";" + offer.Contractor.ManagerName + ";" + offer.Contractor.NumberOfType2PledgedVehicles + ";" + offer.Contractor.NumberOfType3PledgedVehicles + ";" + offer.Contractor.NumberOfType5PledgedVehicles + ";" + offer.Contractor.NumberOfType6PledgedVehicles + ";" + offer.Contractor.NumberOfType7PledgedVehicles + ";" + offer.Contractor.NumberOfWonType2Offers + ";" + offer.Contractor.NumberOfWonType3Offers + ";" + offer.Contractor.NumberOfWonType5Offers + ";" + offer.Contractor.NumberOfWonType6Offers + ";" + offer.Contractor.NumberOfWonType7Offers + ";");
+                            streamWriter.WriteLine(offer.OfferReferenceNumber + ";" + offer.Contractor.CompanyName + ";" + offer.Contractor.ManagerName + ";" + offer.Contractor.Type2PledgedAmount + ";" + offer.Contractor.Type3PledgedAmount + ";" + offer.Contractor.Type5PledgedAmount + ";" + offer.Contractor.Type6PledgedAmount + ";" + offer.Contractor.Type7PledgedAmount + ";" + offer.Contractor.NumberOfWonType2Offers + ";" + offer.Contractor.NumberOfWonType3Offers + ";" + offer.Contractor.NumberOfWonType5Offers + ";" + offer.Contractor.NumberOfWonType6Offers + ";" + offer.Contractor.NumberOfWonType7Offers + ";");
 
                         }
                     }

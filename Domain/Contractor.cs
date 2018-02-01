@@ -5,47 +5,45 @@ namespace Domain
 {
     public class Contractor
     {
-        public List<Offer> ineligibleOffers;
+        public List<Offer> ineligibleOffers = new List<Offer>();
         private int type2;
         private int type3;
         private int type5;
         private int type6;
         private int type7;
 
-        public List<Offer> winningOffers;
+        public List<Offer> winningOffers = new List<Offer>();
 
         public Contractor()
         {
-            winningOffers = new List<Offer>();
-            ineligibleOffers = new List<Offer>();
         }
 
         public Contractor(
             string basicInfoRef, string userId, string companyName,
-            string managerName, int numberOfType2PledgedVehicles, int numberOfType3PledgedVehicles,
-            int numberOfType5PledgedVehicles,
-            int numberOfType6PledgedVehicles, int numberOfType7PledgedVehicles) : this()
+            string managerName, int type2PledgedAmount, int type3PledgedAmount,
+            int type5PledgedAmount,
+            int type6PledgedAmount, int type7PledgedAmount) : this()
         {
             BasicInfoRef = basicInfoRef;
             UserID = userId;
             CompanyName = companyName;
             ManagerName = managerName;
-            NumberOfType2PledgedVehicles = numberOfType2PledgedVehicles;
-            NumberOfType3PledgedVehicles = numberOfType3PledgedVehicles;
-            NumberOfType5PledgedVehicles = numberOfType5PledgedVehicles;
-            NumberOfType6PledgedVehicles = numberOfType6PledgedVehicles;
-            NumberOfType7PledgedVehicles = numberOfType7PledgedVehicles;
+            Type2PledgedAmount = type2PledgedAmount;
+            Type3PledgedAmount = type3PledgedAmount;
+            Type5PledgedAmount = type5PledgedAmount;
+            Type6PledgedAmount = type6PledgedAmount;
+            Type7PledgedAmount = type7PledgedAmount;
         }
 
         public string BasicInfoRef { get; set; }
         public string UserID { get; set; }
         public string CompanyName { get; set; }
         public string ManagerName { get; set; }
-        public int NumberOfType2PledgedVehicles { get; set; }
-        public int NumberOfType3PledgedVehicles { get; set; }
-        public int NumberOfType5PledgedVehicles { get; set; }
-        public int NumberOfType6PledgedVehicles { get; set; }
-        public int NumberOfType7PledgedVehicles { get; set; }
+        public int Type2PledgedAmount { get; set; }
+        public int Type3PledgedAmount { get; set; }
+        public int Type5PledgedAmount { get; set; }
+        public int Type6PledgedAmount { get; set; }
+        public int Type7PledgedAmount { get; set; }
         public string TryParseValueType2PledgedVehicles { get; set; }
         public string TryParseValueType3PledgedVehicles { get; set; }
         public string TryParseValueType5PledgedVehicles { get; set; }
@@ -155,35 +153,35 @@ namespace Domain
 
             if (winningOffers.Count > 0)
             {
-                if (NumberOfType2PledgedVehicles == 0 && NumberOfType3PledgedVehicles == 0 &&
-                    NumberOfType5PledgedVehicles == 0 && NumberOfType6PledgedVehicles == 0 &&
-                    NumberOfType7PledgedVehicles == 0)
+                if (Type2PledgedAmount == 0 && Type3PledgedAmount == 0 &&
+                    Type5PledgedAmount == 0 && Type6PledgedAmount == 0 &&
+                    Type7PledgedAmount == 0)
                 {
                     //If all pledged vehicles is 0, it means they have unlimited amount of vehicles available
                 }
                 else
                 {
-                    foreach (Offer ofr in IfTooManyWonOffers(NumberOfType2PledgedVehicles, type2, 2))
+                    foreach (Offer ofr in IfTooManyWonOffers(Type2PledgedAmount, type2, 2))
                     {
                         offersWithConflict.Add(ofr);
                     }
 
-                    foreach (Offer ofr in IfTooManyWonOffers(NumberOfType3PledgedVehicles, type3, 3))
+                    foreach (Offer ofr in IfTooManyWonOffers(Type3PledgedAmount, type3, 3))
                     {
                         offersWithConflict.Add(ofr);
                     }
 
-                    foreach (Offer ofr in IfTooManyWonOffers(NumberOfType5PledgedVehicles, type5, 5))
+                    foreach (Offer ofr in IfTooManyWonOffers(Type5PledgedAmount, type5, 5))
                     {
                         offersWithConflict.Add(ofr);
                     }
 
-                    foreach (Offer ofr in IfTooManyWonOffers(NumberOfType6PledgedVehicles, type6, 6))
+                    foreach (Offer ofr in IfTooManyWonOffers(Type6PledgedAmount, type6, 6))
                     {
                         offersWithConflict.Add(ofr);
                     }
 
-                    foreach (Offer ofr in IfTooManyWonOffers(NumberOfType7PledgedVehicles, type7, 7))
+                    foreach (Offer ofr in IfTooManyWonOffers(Type7PledgedAmount, type7, 7))
                     {
                         offersWithConflict.Add(ofr);
                     }

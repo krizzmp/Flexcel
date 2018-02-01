@@ -170,13 +170,13 @@ namespace DataAccess
                         {
                             bool doesAlreadyContain = listOfContractors.Any(obj => obj.UserID == c.UserID);
 
-                            c.NumberOfType2PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType2PledgedVehicles);
-                            c.NumberOfType3PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType3PledgedVehicles);
-                            c.NumberOfType5PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType5PledgedVehicles);
-                            c.NumberOfType6PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType6PledgedVehicles);
-                            c.NumberOfType7PledgedVehicles = TryParseToIntElseZero(c.TryParseValueType7PledgedVehicles);
+                            c.Type2PledgedAmount = TryParseToIntElseZero(c.TryParseValueType2PledgedVehicles);
+                            c.Type3PledgedAmount = TryParseToIntElseZero(c.TryParseValueType3PledgedVehicles);
+                            c.Type5PledgedAmount = TryParseToIntElseZero(c.TryParseValueType5PledgedVehicles);
+                            c.Type6PledgedAmount = TryParseToIntElseZero(c.TryParseValueType6PledgedVehicles);
+                            c.Type7PledgedAmount = TryParseToIntElseZero(c.TryParseValueType7PledgedVehicles);
 
-                            Contractor newContractor = new Contractor(c.BasicInfoRef, c.UserID, c.CompanyName, c.ManagerName, c.NumberOfType2PledgedVehicles, c.NumberOfType3PledgedVehicles, c.NumberOfType5PledgedVehicles, c.NumberOfType6PledgedVehicles, c.NumberOfType7PledgedVehicles);
+                            Contractor newContractor = new Contractor(c.BasicInfoRef, c.UserID, c.CompanyName, c.ManagerName, c.Type2PledgedAmount, c.Type3PledgedAmount, c.Type5PledgedAmount, c.Type6PledgedAmount, c.Type7PledgedAmount);
                             listOfContractors.Add(newContractor);
                         }
                     }
