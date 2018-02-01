@@ -21,13 +21,13 @@ namespace Domain
         }
 
         public Contractor(
-            string referenceNumberBasicInformationPDF, string userID, string companyName,
+            string referenceNumberBasicInformationPDF, string userId, string companyName,
             string managerName, int numberOfType2PledgedVehicles, int numberOfType3PledgedVehicles,
             int numberOfType5PledgedVehicles,
             int numberOfType6PledgedVehicles, int numberOfType7PledgedVehicles) : this()
         {
             ReferenceNumberBasicInformationPDF = referenceNumberBasicInformationPDF;
-            UserID = userID;
+            UserID = userId;
             CompanyName = companyName;
             ManagerName = managerName;
             NumberOfType2PledgedVehicles = numberOfType2PledgedVehicles;
