@@ -43,6 +43,26 @@ namespace CodedUITestProject1
             this.UIMap.AssertContractor();
         }
 
+        [TestMethod]
+        public void CodedUiTestContractorOther()
+        {
+            Console.WriteLine("test logs all thing that i like");
+            Console.WriteLine("---------------------------------");
+            this.UIMap.EnterDataPaths2(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\RouteNumbers.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Tilbud_FakeData.csv"
+            );
+
+            //this.UIMap.notGoingToUse();
+            this.UIMap.AssertNoBidsError();
+
+
+            //this.UIMap.AssertContractor();
+            //this.UIMap.AssertEmptyConflictList();
+
+        }
+
         #region Additional test attributes
 
         // You can use the following additional attributes as you write your tests:

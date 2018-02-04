@@ -40,6 +40,68 @@ namespace CodedUITestProject1
             ApplicationUnderTest uIFlexSorteringWindow = ApplicationUnderTest.Launch(this.RecordedMethod2Params.UIFlexSorteringWindowExePath, this.RecordedMethod2Params.UIFlexSorteringWindowAlternateExePath);
         }
         
+        /// <summary>
+        /// AssertEmptyConflictList - Use 'AssertEmptyConflictListExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertEmptyConflictList()
+        {
+            #region Variable Declarations
+            WpfTable uIListViewTable = this.UIPrioriteringWindow.UIListViewTable;
+            #endregion
+
+            // Verify that the 'RowCount' property of 'listView' table equals '0'
+            Assert.AreEqual(this.AssertEmptyConflictListExpectedValues.UIListViewTableRowCount, uIListViewTable.RowCount);
+        }
+        
+        /// <summary>
+        /// notGoingToUse
+        /// </summary>
+        public void notGoingToUse()
+        {
+            #region Variable Declarations
+            WpfButton uIImporterButton = this.UIFlexSorteringWindow.UIImporterButton;
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WpfButton uIStartUdvælgelseButton = this.UIFlexSorteringWindow.UIStartUdvælgelseButton;
+            WpfText uIDereringenbudpågaranText = this.UIPrioriteringWindow.UIDereringenbudpågaranText;
+            WpfTable uIListViewTable = this.UIPrioriteringWindow.UIListViewTable;
+            WpfControl uINavnHeaderItem = this.UIPrioriteringWindow.UIListViewTable.UIItemHeader.UINavnHeaderItem;
+            #endregion
+
+            //// Click 'Importer' button
+            //Mouse.Click(uIImporterButton, new Point(68, 6));
+
+            //// Click 'OK' button
+            //Mouse.Click(uIOKButton, new Point(74, 15));
+
+            //// Click 'Start Udvælgelse' button
+            //Mouse.Click(uIStartUdvælgelseButton, new Point(114, 15));
+
+            // Click 'Der er ingen bud på garantivognsnummer 1' label
+            Mouse.Click(uIDereringenbudpågaranText, new Point(312, 15));
+
+            // Click 'listView' table
+            Mouse.Click(uIListViewTable, new Point(314, 88));
+
+            // Double-Click 'listView' table
+            Mouse.DoubleClick(uIListViewTable, new Point(464, 249));
+
+            // Click 'Navn' HeaderItem
+            Mouse.Click(uINavnHeaderItem, new Point(105, 29));
+        }
+        
+        /// <summary>
+        /// AssertNoBidsError - Use 'AssertNoBidsErrorExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertNoBidsError()
+        {
+            #region Variable Declarations
+            WpfText uIDereringenbudpågaranText = this.UIPrioriteringWindow.UIDereringenbudpågaranText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Der er ingen bud på garantivognsnummer 1' label equals 'Der er ingen bud på garantivognsnummer 1'
+            Assert.AreEqual(this.AssertNoBidsErrorExpectedValues.UIDereringenbudpågaranTextDisplayText, uIDereringenbudpågaranText.DisplayText);
+        }
+        
         #region Properties
         public virtual RecordedMethod2Params RecordedMethod2Params
         {
@@ -50,6 +112,30 @@ namespace CodedUITestProject1
                     this.mRecordedMethod2Params = new RecordedMethod2Params();
                 }
                 return this.mRecordedMethod2Params;
+            }
+        }
+        
+        public virtual AssertEmptyConflictListExpectedValues AssertEmptyConflictListExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertEmptyConflictListExpectedValues == null))
+                {
+                    this.mAssertEmptyConflictListExpectedValues = new AssertEmptyConflictListExpectedValues();
+                }
+                return this.mAssertEmptyConflictListExpectedValues;
+            }
+        }
+        
+        public virtual AssertNoBidsErrorExpectedValues AssertNoBidsErrorExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertNoBidsErrorExpectedValues == null))
+                {
+                    this.mAssertNoBidsErrorExpectedValues = new AssertNoBidsErrorExpectedValues();
+                }
+                return this.mAssertNoBidsErrorExpectedValues;
             }
         }
         
@@ -88,16 +174,34 @@ namespace CodedUITestProject1
                 return this.mUIOKWindow;
             }
         }
+        
+        public UIPrioriteringWindow UIPrioriteringWindow
+        {
+            get
+            {
+                if ((this.mUIPrioriteringWindow == null))
+                {
+                    this.mUIPrioriteringWindow = new UIPrioriteringWindow();
+                }
+                return this.mUIPrioriteringWindow;
+            }
+        }
         #endregion
         
         #region Fields
         private RecordedMethod2Params mRecordedMethod2Params;
+        
+        private AssertEmptyConflictListExpectedValues mAssertEmptyConflictListExpectedValues;
+        
+        private AssertNoBidsErrorExpectedValues mAssertNoBidsErrorExpectedValues;
         
         private UIFlexSorteringWindow mUIFlexSorteringWindow;
         
         private UIOpenWindow mUIOpenWindow;
         
         private UIOKWindow mUIOKWindow;
+        
+        private UIPrioriteringWindow mUIPrioriteringWindow;
         #endregion
     }
     
@@ -120,6 +224,36 @@ namespace CodedUITestProject1
         /// </summary>
         public string UIFlexSorteringWindowAlternateExePath = "%USERPROFILE%\\Documents\\flextrafik\\Fynbus\\Flexcel_Fynbus\\Kode\\Flexcel\\View\\bin\\De" +
             "bug\\View.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertEmptyConflictList'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "15.0.26208.0")]
+    public class AssertEmptyConflictListExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'RowCount' property of 'listView' table equals '0'
+        /// </summary>
+        public int UIListViewTableRowCount = 0;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertNoBidsError'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "15.0.26208.0")]
+    public class AssertNoBidsErrorExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Der er ingen bud på garantivognsnummer 1' label equals 'Der er ingen bud på garantivognsnummer 1'
+        /// </summary>
+        public string UIDereringenbudpågaranTextDisplayText = "Der er ingen bud på garantivognsnummer 1";
         #endregion
     }
     
@@ -1109,6 +1243,125 @@ namespace CodedUITestProject1
         
         #region Fields
         private WinButton mUIOKButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "15.0.26208.0")]
+    public class UIPrioriteringWindow : WpfWindow
+    {
+        
+        public UIPrioriteringWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Prioritering";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Prioritering");
+            #endregion
+        }
+        
+        #region Properties
+        public UIListViewTable1 UIListViewTable
+        {
+            get
+            {
+                if ((this.mUIListViewTable == null))
+                {
+                    this.mUIListViewTable = new UIListViewTable1(this);
+                }
+                return this.mUIListViewTable;
+            }
+        }
+        
+        public WpfText UIDereringenbudpågaranText
+        {
+            get
+            {
+                if ((this.mUIDereringenbudpågaranText == null))
+                {
+                    this.mUIDereringenbudpågaranText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIDereringenbudpågaranText.SearchProperties[WpfText.PropertyNames.AutomationId] = "tbConflictMessage";
+                    this.mUIDereringenbudpågaranText.WindowTitles.Add("Prioritering");
+                    #endregion
+                }
+                return this.mUIDereringenbudpågaranText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIListViewTable1 mUIListViewTable;
+        
+        private WpfText mUIDereringenbudpågaranText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "15.0.26208.0")]
+    public class UIListViewTable1 : WpfTable
+    {
+        
+        public UIListViewTable1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTable.PropertyNames.AutomationId] = "listView";
+            this.WindowTitles.Add("Prioritering");
+            #endregion
+        }
+        
+        #region Properties
+        public UIItemHeader1 UIItemHeader
+        {
+            get
+            {
+                if ((this.mUIItemHeader == null))
+                {
+                    this.mUIItemHeader = new UIItemHeader1(this);
+                }
+                return this.mUIItemHeader;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIItemHeader1 mUIItemHeader;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "15.0.26208.0")]
+    public class UIItemHeader1 : WpfControl
+    {
+        
+        public UIItemHeader1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ControlType] = "Header";
+            this.WindowTitles.Add("Prioritering");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfControl UINavnHeaderItem
+        {
+            get
+            {
+                if ((this.mUINavnHeaderItem == null))
+                {
+                    this.mUINavnHeaderItem = new WpfControl(this);
+                    #region Search Criteria
+                    this.mUINavnHeaderItem.SearchProperties[WpfControl.PropertyNames.ControlType] = "HeaderItem";
+                    this.mUINavnHeaderItem.SearchProperties[WpfControl.PropertyNames.Name] = "Navn";
+                    this.mUINavnHeaderItem.WindowTitles.Add("Prioritering");
+                    #endregion
+                }
+                return this.mUINavnHeaderItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfControl mUINavnHeaderItem;
         #endregion
     }
 }

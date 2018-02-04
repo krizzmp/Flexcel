@@ -41,7 +41,53 @@ namespace CodedUITestProject1
             // Click 'OK' button
             Mouse.Click(uIOKButton, new Point(30, 23));
             //uIFlexSorteringWindow.WaitForControlNotExist();
-            
+
+        }
+        public void EnterDataPaths2(string routeNumbersFilePath, string masterPath, string offersPath)
+        {
+            #region Variable Declarations
+            WpfButton uIImporterButton = this.UIFlexSorteringWindow.UIImporterButton;
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WpfButton uIStartUdvælgelseButton = this.UIFlexSorteringWindow.UIStartUdvælgelseButton;
+            WpfEdit filePathRouteNumbers = this.UIFlexSorteringWindow.UITxtBoxFilePathRouteNEdit1;
+            WpfEdit filePathMaster = this.UIFlexSorteringWindow.UITxtBoxFilePathMasterEdit;
+            WpfEdit filePathOffers = this.UIFlexSorteringWindow.UITxtBoxFilePathRouteNEdit;
+
+            WpfText uIDereringenbudpågaranText = this.UIPrioriteringWindow.UIDereringenbudpågaranText;
+            WpfTable uIListViewTable = this.UIPrioriteringWindow.UIListViewTable;
+            WpfControl uINavnHeaderItem = this.UIPrioriteringWindow.UIListViewTable.UIItemHeader.UINavnHeaderItem;
+            #endregion
+
+            // Launch '%USERPROFILE%\Documents\flextrafik\Fynbus\Flexcel_Fynbus\Kode\Flexcel\View\bin\Debug\View.exe'
+            ApplicationUnderTest uIFlexSorteringWindow = ApplicationUnderTest.Launch(this.RecordedMethod2Params.UIFlexSorteringWindowExePath, this.RecordedMethod2Params.UIFlexSorteringWindowAlternateExePath);
+
+            filePathRouteNumbers.Text = routeNumbersFilePath;
+            filePathMaster.Text = masterPath;
+            filePathOffers.Text = offersPath;
+
+            // Click 'Importer' button
+            Mouse.Click(uIImporterButton, new Point(85, 24));
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(88, 29));
+
+            // Click 'Start Udvælgelse' button
+            Mouse.Click(uIStartUdvælgelseButton, new Point(73, 18));
+
+            // Click 'OK' button
+            //Mouse.Click(uIOKButton, new Point(30, 23));
+            //uIFlexSorteringWindow.WaitForControlNotExist();
+            //Mouse.Click(uIDereringenbudpågaranText, new Point(312, 15));
+
+            //// Click 'listView' table
+            //Mouse.Click(uIListViewTable, new Point(314, 88));
+
+            //// Double-Click 'listView' table
+            //Mouse.DoubleClick(uIListViewTable, new Point(464, 249));
+
+            //// Click 'Navn' HeaderItem
+            //Mouse.Click(uINavnHeaderItem, new Point(105, 29));
+
         }
         /// <summary>
         /// Assert3BidsForSameRoute - Use 'AssertMethod2ExpectedValues' to pass parameters into this method.
