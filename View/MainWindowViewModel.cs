@@ -1,7 +1,10 @@
-﻿using Logic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Logic;
 using Microsoft.Win32;
 using System.Windows;
 using System.Threading;
+using Domain;
 
 namespace View
 {
@@ -78,7 +81,7 @@ namespace View
                 MessageBox.Show("Du har ikke udvalgt vinderne endnu.. Kør Udvælgelse først!");
             }
         }
-        public void InitializeSelection()
+        public List<Offer> InitializeSelection()
         {
             if (ImportDone)
             {
@@ -89,6 +92,13 @@ namespace View
                 MessageBox.Show("Du skal importere filerne først.");
             }
             selectionController.SelectWinners();
+            ListContainer listContainer = ListContainer.Instance;
+            List<Offer> outputListByUserId = listContainer.OutputList.OrderBy(x => x.UserID).ToList();
+            foreach (Offer offer in listContainer.OutputList)
+            {
+                offer.Contractor.CountNumberOfWonOffersOfEachType(listContainer.OutputList);
+            }
+            return outputListByUserId;
         }
     }
 }

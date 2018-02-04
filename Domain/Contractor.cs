@@ -5,40 +5,9 @@ namespace Domain
 {
     public class Contractor
     {
-        public List<Offer> ineligibleOffers;
-        private int type2;
-        private int type3;
-        private int type5;
-        private int type6;
-        private int type7;
-
-        public List<Offer> winningOffers;
-
-        public Contractor()
-        {
-            winningOffers = new List<Offer>();
-            ineligibleOffers = new List<Offer>();
-        }
-
-        public Contractor(
-            string referenceNumberBasicInformationPDF, string userID, string companyName,
-            string managerName, int numberOfType2PledgedVehicles, int numberOfType3PledgedVehicles,
-            int numberOfType5PledgedVehicles,
-            int numberOfType6PledgedVehicles, int numberOfType7PledgedVehicles) : this()
-        {
-            ReferenceNumberBasicInformationPDF = referenceNumberBasicInformationPDF;
-            UserID = userID;
-            CompanyName = companyName;
-            ManagerName = managerName;
-            NumberOfType2PledgedVehicles = numberOfType2PledgedVehicles;
-            NumberOfType3PledgedVehicles = numberOfType3PledgedVehicles;
-            NumberOfType5PledgedVehicles = numberOfType5PledgedVehicles;
-            NumberOfType6PledgedVehicles = numberOfType6PledgedVehicles;
-            NumberOfType7PledgedVehicles = numberOfType7PledgedVehicles;
-        }
-
-        public string ReferenceNumberBasicInformationPDF { get; set; }
-        public string UserID { get; set; }
+        public List<Offer> WinningOffers { get; private set; } = new List<Offer>();
+        public string ReferenceNumberBasicInformationPdf { get; set; }
+        public string UserId { get; set; }
         public string CompanyName { get; set; }
         public string ManagerName { get; set; }
         public int NumberOfType2PledgedVehicles { get; set; }
@@ -46,11 +15,6 @@ namespace Domain
         public int NumberOfType5PledgedVehicles { get; set; }
         public int NumberOfType6PledgedVehicles { get; set; }
         public int NumberOfType7PledgedVehicles { get; set; }
-        public string TryParseValueType2PledgedVehicles { get; set; }
-        public string TryParseValueType3PledgedVehicles { get; set; }
-        public string TryParseValueType5PledgedVehicles { get; set; }
-        public string TryParseValueType6PledgedVehicles { get; set; }
-        public string TryParseValueType7PledgedVehicles { get; set; }
         public int NumberOfWonType2Offers { get; private set; }
         public int NumberOfWonType3Offers { get; private set; }
         public int NumberOfWonType5Offers { get; private set; }
@@ -59,14 +23,14 @@ namespace Domain
 
         public void AddWonOffer(Offer offer)
         {
-            bool alreadyOnTheList = winningOffers.Any(item => item.OfferReferenceNumber == offer.OfferReferenceNumber);
+            bool alreadyOnTheList = WinningOffers.Any(item => item.OfferReferenceNumber == offer.OfferReferenceNumber);
             if (!alreadyOnTheList)
             {
-                winningOffers.Add(offer);
+                WinningOffers.Add(offer);
             }
             else
             {
-                foreach (Offer winOffer in winningOffers)
+                foreach (Offer winOffer in WinningOffers)
                 {
                     if (winOffer.OfferReferenceNumber == offer.OfferReferenceNumber)
                     {
@@ -78,50 +42,25 @@ namespace Domain
 
         public List<Offer> ReturnIneligibleOffers()
         {
-            List<Offer> InEligibleOffersToReturn = new List<Offer>();
-            foreach (Offer offer in winningOffers)
-            {
-                if (!offer.IsEligible)
-                {
-                    InEligibleOffersToReturn.Add(offer);
-                }
-            }
-
-            return InEligibleOffersToReturn;
+            return WinningOffers.Where(offer => !offer.IsEligible).ToList();
         }
 
         public void RemoveIneligibleOffersFromWinningOffers()
         {
-            List<Offer> toBeRemoved = new List<Offer>();
-            foreach (Offer offer in winningOffers)
-            {
-                if (!offer.IsEligible)
-                {
-                    ineligibleOffers.Add(offer);
-                    toBeRemoved.Add(offer);
-                }
-            }
-
-            if (toBeRemoved.Count > 0)
-            {
-                foreach (Offer offer in toBeRemoved)
-                {
-                    winningOffers.Remove(offer);
-                }
-            }
+            WinningOffers.RemoveAll(offer => !offer.IsEligible);
         }
 
-        public List<Offer> CompareNumberOfWonOffersAgainstVehicles()
+        public List<Offer> GetOffersWithInsufficientVehicles()
         {
             List<Offer> offersWithConflict = new List<Offer>();
-            type2 = 0;
-            type3 = 0;
-            type5 = 0;
-            type6 = 0;
-            type7 = 0;
-            if (winningOffers.Count > 0)
+            int type2 = 0;
+            int type3 = 0;
+            int type5 = 0;
+            int type6 = 0;
+            int type7 = 0;
+            if (WinningOffers.Count > 0)
             {
-                foreach (Offer offer in winningOffers)
+                foreach (Offer offer in WinningOffers)
                 {
                     if (offer.IsEligible)
                     {
@@ -153,7 +92,7 @@ namespace Domain
                 }
             }
 
-            if (winningOffers.Count > 0)
+            if (WinningOffers.Count > 0)
             {
                 if (NumberOfType2PledgedVehicles == 0 && NumberOfType3PledgedVehicles == 0 &&
                     NumberOfType5PledgedVehicles == 0 && NumberOfType6PledgedVehicles == 0 &&
@@ -197,7 +136,7 @@ namespace Domain
         {
             List<Offer> offersToCheck = new List<Offer>();
             List<Offer> listOfOffersToReturn = new List<Offer>();
-            foreach (Offer winningOffer in winningOffers)
+            foreach (Offer winningOffer in WinningOffers)
             {
                 if (winningOffer.IsEligible && winningOffer.RequiredVehicleType == type)
                 {
@@ -211,7 +150,7 @@ namespace Domain
                 if (numberOfPledgedVehicles == 0
                 ) //This is done because, sometimes contractors place bids on routenumbers, they don't have the correct vehicle type for. 
                 {
-                    foreach (Offer offer in winningOffers)
+                    foreach (Offer offer in WinningOffers)
                     {
                         if (offer.RequiredVehicleType == type)
                         {
@@ -231,30 +170,18 @@ namespace Domain
         private List<Offer> FindOptimalWins(List<Offer> offersToCheck, int numberOfPledgedVehicles)
         {
             List<Offer> offersWithConflict = new List<Offer>();
-            List<Offer> offersToChooseFrom = offersToCheck.OrderByDescending(x => x.DifferenceToNextOffer)
-                .ThenBy(x => x.ContractorPriority).ToList();
+            List<Offer> offersToChooseFrom = offersToCheck
+                .OrderByDescending(x => x.DifferenceToNextOffer)
+                .ThenBy(x => x.ContractorPriority)
+                .ToList();
 
             foreach (Offer offer in offersToChooseFrom)
             {
-                if (offer.DifferenceToNextOffer >=
-                    offersToChooseFrom[numberOfPledgedVehicles - 1].DifferenceToNextOffer)
-                {
-                    offer.IsEligible = true;
-                }
-                else
-                {
-                    offer.IsEligible = false;
-                }
+                offer.IsEligible = offer.DifferenceToNextOffer >=
+                                   offersToChooseFrom[numberOfPledgedVehicles - 1].DifferenceToNextOffer;
             }
 
-            int eligibleOffers = 0;
-            foreach (Offer offer in offersToChooseFrom)
-            {
-                if (offer.IsEligible)
-                {
-                    eligibleOffers++;
-                }
-            }
+            int eligibleOffers = offersToChooseFrom.Count(offer => offer.IsEligible);
 
             if (eligibleOffers > numberOfPledgedVehicles)
             {
@@ -302,34 +229,25 @@ namespace Domain
             NumberOfWonType7Offers = 0;
 
 
-            foreach (Offer offer in outPutList)
+            foreach (Offer offer in outPutList.Where(offer => offer.UserID == UserId))
             {
-                if (offer.UserID == UserID)
+                switch (offer.RequiredVehicleType)
                 {
-                    if (offer.RequiredVehicleType == 2)
-                    {
+                    case 2:
                         NumberOfWonType2Offers++;
-                    }
-
-                    if (offer.RequiredVehicleType == 3)
-                    {
+                        break;
+                    case 3:
                         NumberOfWonType3Offers++;
-                    }
-
-                    if (offer.RequiredVehicleType == 5)
-                    {
+                        break;
+                    case 5:
                         NumberOfWonType5Offers++;
-                    }
-
-                    if (offer.RequiredVehicleType == 6)
-                    {
+                        break;
+                    case 6:
                         NumberOfWonType6Offers++;
-                    }
-
-                    if (offer.RequiredVehicleType == 7)
-                    {
+                        break;
+                    case 7:
                         NumberOfWonType7Offers++;
-                    }
+                        break;
                 }
             }
         }

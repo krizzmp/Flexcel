@@ -8,17 +8,16 @@ namespace DataAccess
 {
     public class CSVExportToPublishList
     {
-        private readonly Encoding encoding;
-        private readonly string FilePath;
-        private readonly ListContainer listContainer;
-        private readonly List<Offer> winningOfferList;
-
+        private readonly Encoding _encoding;
+        private readonly string _filePath;
+        private readonly List<Offer> _winningOfferList;
+        
         public CSVExportToPublishList(string filePath)
         {
-            FilePath = filePath;
-            listContainer = ListContainer.GetInstance();
-            winningOfferList = listContainer.outputList;
-            encoding = Encoding.GetEncoding("iso-8859-1");
+            _filePath = filePath;
+            ListContainer listContainer = ListContainer.Instance;
+            _winningOfferList = listContainer.OutputList;
+            _encoding = Encoding.GetEncoding("iso-8859-1");
         }
 
         public void CreateFile()
@@ -26,21 +25,21 @@ namespace DataAccess
             try
             {
                 // Delete the file if it exists.
-                if (File.Exists(FilePath))
+                if (File.Exists(_filePath))
                 {
                     // Note that no lock is put on the
                     // file and the possibility exists
                     // that another process could do
                     // something with it between
                     // the calls to Exists and Delete.
-                    File.Delete(FilePath);
+                    File.Delete(_filePath);
                 }
 
                 // Create the file.
-                using (StreamWriter streamWriter = new StreamWriter(FilePath, true, encoding))
+                using (StreamWriter streamWriter = new StreamWriter(_filePath, true, _encoding))
                 {
                     streamWriter.WriteLine("Garantivognsnummer" + ";" + "Virksomhedsnavn" + ";" + "Pris" + ";");
-                    foreach (Offer offer in winningOfferList)
+                    foreach (Offer offer in _winningOfferList)
                     {
                         streamWriter.WriteLine(offer.RouteID + ";" + offer.Contractor.CompanyName + ";" +
                                                offer.OperationPrice + ";");
@@ -50,7 +49,7 @@ namespace DataAccess
                 }
 
                 // Open the stream and read it back.
-                using (StreamReader sr = File.OpenText(FilePath))
+                using (StreamReader sr = File.OpenText(_filePath))
                 {
                     string s = "";
                     while ((s = sr.ReadLine()) != null)

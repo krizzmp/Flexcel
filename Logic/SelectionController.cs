@@ -5,53 +5,56 @@ using Domain;
 namespace Logic
 {
     public class SelectionController
-    {       
-        public List<RouteNumber> routeNumberList;
-        public Selection selection;
-        public List<RouteNumber> sortedRouteNumberList;
-        ListContainer listContainer = ListContainer.GetInstance();
-        
+    {
+        private List<RouteNumber> _routeNumberList;
+        private readonly Selection _selection;
+        private List<RouteNumber> _sortedRouteNumberList;
+        private readonly ListContainer _listContainer = ListContainer.Instance;
+
         public SelectionController()
         {
-            routeNumberList = new List<RouteNumber>();
-            selection = new Selection();
+            _routeNumberList = new List<RouteNumber>();
+            _selection = new Selection();
         }
 
         private void SortRouteNumberList(List<RouteNumber> routeNumberList)
         {
-            sortedRouteNumberList = routeNumberList.OrderBy(x => x.RouteID).ToList();
-            foreach (RouteNumber routeNumber in sortedRouteNumberList)
+            _sortedRouteNumberList = routeNumberList.OrderBy(x => x.RouteID).ToList();
+            foreach (RouteNumber routeNumber in _sortedRouteNumberList)
             {
-                routeNumber.offers = routeNumber.offers.OrderBy(x => x.OperationPrice).ThenBy(x => x.RouteNumberPriority).ToList();
+                routeNumber.offers = routeNumber.offers.OrderBy(x => x.OperationPrice)
+                    .ThenBy(x => x.RouteNumberPriority).ToList();
             }
         }
+
         public void SelectWinners()
         {
-            routeNumberList = listContainer.routeNumberList;
-            SortRouteNumberList(routeNumberList);
+            _routeNumberList = _listContainer.RouteNumberList;
+            SortRouteNumberList(_routeNumberList);
             List<Offer> offersToAssign = new List<Offer>();
 
-            selection.CalculateOperationPriceDifferenceForOffers(sortedRouteNumberList);
-            int lengthOfSortedRouteNumberList = sortedRouteNumberList.Count();
-            for (int i = 0; i < lengthOfSortedRouteNumberList; i++)
+            _selection.CalculateOperationPriceDifferenceForOffers(_sortedRouteNumberList);
+            
+            foreach (RouteNumber routeNumber in _sortedRouteNumberList)
             {
-                List<Offer> toAddToAssign = selection.FindWinner(sortedRouteNumberList[i]);
+                List<Offer> toAddToAssign = _selection.FindWinner(routeNumber);
                 foreach (Offer offer in toAddToAssign)
                 {
                     offersToAssign.Add(offer);
                 }
             }
-            List<Offer> offersThatAreIneligible = selection.AssignWinners(offersToAssign, sortedRouteNumberList);
+
+            List<Offer> offersThatAreIneligible = _selection.AssignWinners(offersToAssign);
 
             bool allRouteNumberHaveWinner = DoAllRouteNumbersHaveWinner(offersThatAreIneligible);
             if (allRouteNumberHaveWinner)
             {
-                selection.CheckIfContractorHasWonTooManyRouteNumbers(CreateWinnerList(), sortedRouteNumberList);
-                selection.CheckForMultipleWinnersForEachRouteNumber(CreateWinnerList());
+                _selection.CheckIfContractorHasWonTooManyRouteNumbers(CreateWinnerList());
+                _selection.CheckForMultipleWinnersForEachRouteNumber(CreateWinnerList());
                 List<Offer> winningOffers = CreateWinnerList();
                 foreach (Offer offer in winningOffers)
                 {
-                    listContainer.outputList.Add(offer);
+                    _listContainer.OutputList.Add(offer);
                 }
             }
             else
@@ -59,65 +62,57 @@ namespace Logic
                 ContinueUntilAllRouteNumbersHaveWinner(offersThatAreIneligible);
             }
         }
+
         private void ContinueUntilAllRouteNumbersHaveWinner(List<Offer> offersThatAreIneligible)
         {
-            List<Offer> offersThatHaveBeenMarkedIneligible = offersThatAreIneligible;
+            List<Offer> offersToAssign =
+                GetOffersToAssign(offersThatAreIneligible);
+
+            var offersThatHaveBeenMarkedIneligible =  _selection.AssignWinners(offersToAssign);
+            bool allRouteNumberHaveWinner = DoAllRouteNumbersHaveWinner(offersThatHaveBeenMarkedIneligible);
+            if (allRouteNumberHaveWinner)
+            {
+                _selection.CheckIfContractorHasWonTooManyRouteNumbers(CreateWinnerList());
+                _selection.CheckForMultipleWinnersForEachRouteNumber(CreateWinnerList());
+                foreach (Offer offer in CreateWinnerList())
+                {
+                    _listContainer.OutputList.Add(offer);
+                }
+            } // Sidste punkt
+            else
+            {
+                ContinueUntilAllRouteNumbersHaveWinner(offersThatHaveBeenMarkedIneligible);
+            }
+        }
+
+        private List<Offer> GetOffersToAssign(List<Offer> offersThatHaveBeenMarkedIneligible)
+        {
             List<Offer> offersToAssign = new List<Offer>();
 
             foreach (Offer offer in offersThatHaveBeenMarkedIneligible)
             {
-                foreach (RouteNumber routeNumber in sortedRouteNumberList)
+                foreach (RouteNumber routeNumber in _sortedRouteNumberList)
                 {
                     if (routeNumber.RouteID == offer.RouteID)
                     {
-                        List<Offer> offersToAssignToContractor = selection.FindWinner(routeNumber);
-                        foreach (Offer ofr in offersToAssignToContractor)
-                        {
-                            offersToAssign.Add(ofr);
-                        }
+                        
+                        List<Offer> offersToAssignToContractor = _selection.FindWinner(routeNumber);
+                        offersToAssign.AddRange(offersToAssignToContractor);
                     }
                 }
             }
-            offersThatHaveBeenMarkedIneligible = selection.AssignWinners(offersToAssign, sortedRouteNumberList);
-            bool allRouteNumberHaveWinner = DoAllRouteNumbersHaveWinner(offersThatHaveBeenMarkedIneligible);
-            if (allRouteNumberHaveWinner)
-            {
-                selection.CheckIfContractorHasWonTooManyRouteNumbers(CreateWinnerList(), sortedRouteNumberList);
-                selection.CheckForMultipleWinnersForEachRouteNumber(CreateWinnerList());
-                foreach (Offer offer in CreateWinnerList())
-                {
-                    listContainer.outputList.Add(offer);
-                }
-            } // Sidste punkt
-            else
-            {                
-                ContinueUntilAllRouteNumbersHaveWinner(offersThatHaveBeenMarkedIneligible);
-            }
-        }
-        public List<Offer> CreateWinnerList()
-        {
-            List<Offer> winningOffers = new List<Offer>();
 
-            foreach (Contractor c in listContainer.contractorList)
-            {
-                foreach (Offer o in c.winningOffers)
-                {
-                    winningOffers.Add(o);
-                }
-            }
-            return winningOffers;
+            return offersToAssign;
         }
+
+        private List<Offer> CreateWinnerList()
+        {
+            return _listContainer.ContractorList.SelectMany(c => c.WinningOffers).ToList();
+        }
+
         private bool DoAllRouteNumbersHaveWinner(List<Offer> offersThatAreIneligible)
         {
-            if (offersThatAreIneligible.Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return offersThatAreIneligible.Count == 0;
         }
     }
 }
-

@@ -4,28 +4,25 @@ namespace Domain
 {
     public sealed class ListContainer
     {
-        public List<RouteNumber> routeNumberList;
-        public List<Contractor> contractorList;
-        public List<Offer> outputList;
-        public List<Offer> conflictList;
-        static readonly ListContainer listContainer = new ListContainer();
+        public List<RouteNumber> RouteNumberList;
+        public List<Contractor> ContractorList;
+        public readonly List<Offer> OutputList;
+        public readonly List<Offer> ConflictList;
 
         private ListContainer()
         {
-            routeNumberList = new List<RouteNumber>(); 
-            contractorList = new List<Contractor>();
-            outputList = new List<Offer>();
-            conflictList = new List<Offer>();
+            RouteNumberList = new List<RouteNumber>(); 
+            ContractorList = new List<Contractor>();
+            OutputList = new List<Offer>();
+            ConflictList = new List<Offer>();
         }
 
-        public static ListContainer GetInstance()
+        public static ListContainer Instance { get; } = new ListContainer();
+
+        public void SetLists(List<RouteNumber> routeNumberList, List<Contractor> contractorList)
         {
-          return listContainer;
-        }
-        public void GetLists(List<RouteNumber> routeNumberList, List<Contractor> contractorList)
-        {
-            this.routeNumberList = routeNumberList;
-            this.contractorList = contractorList;
+            this.RouteNumberList = routeNumberList;
+            this.ContractorList = contractorList;
         }
     }
 }

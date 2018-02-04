@@ -41,7 +41,11 @@ namespace View
             }
             else
             {
-                _mainWindowViewModel.ImportCSV(TxtBoxFilePathMasterData.Text, TxtBoxFilePathRouteNumberOffer.Text, TxtBoxFilePathRouteNumbers.Text);
+                _mainWindowViewModel.ImportCSV(
+                    TxtBoxFilePathMasterData.Text,
+                    TxtBoxFilePathRouteNumberOffer.Text,
+                    TxtBoxFilePathRouteNumbers.Text
+                );
                 MessageBox.Show("Filerne er nu importeret");
                 _mainWindowViewModel.ImportDone = true;
             }
@@ -51,15 +55,8 @@ namespace View
         {
             try
             {
-                _mainWindowViewModel.InitializeSelection();
-                ListContainer listContainer = ListContainer.GetInstance();
-                List<Offer> outputListByUserId = listContainer.outputList.OrderBy(x => x.UserID).ToList();
+                List<Offer> outputListByUserId = _mainWindowViewModel.InitializeSelection();
                 ListView.ItemsSource = outputListByUserId;
-                foreach (Offer offer in listContainer.outputList)
-                {
-                    offer.Contractor.CountNumberOfWonOffersOfEachType(listContainer.outputList);
-                }
-
                 MessageBox.Show("Udvælgelsen er nu færdig");
             }
             catch (Exception x)

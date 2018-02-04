@@ -6,23 +6,23 @@ namespace Logic
 {
     public class IOController
     {
-        List<RouteNumber> routeNumberList;
-        List<Contractor> contractorList;
+        private List<RouteNumber> _routeNumberList;
+        private List<Contractor> _contractorList;
 
         public IOController()
         {
-            routeNumberList = new List<RouteNumber>();
+            _routeNumberList = new List<RouteNumber>();
         }
        
         public void InitializeExportToPublishList(string filePath)
         {
-            CSVExportToPublishList ExportToPublishList = new CSVExportToPublishList(filePath);
-            ExportToPublishList.CreateFile(); 
+            CSVExportToPublishList exportToPublishList = new CSVExportToPublishList(filePath);
+            exportToPublishList.CreateFile(); 
         }
         public void InitializeExportToCallingList(string filePath)
         {
-            CSVExportToCallList ExportCallList = new CSVExportToCallList(filePath);
-            ExportCallList.CreateFile();
+            CSVExportToCallList exportCallList = new CSVExportToCallList(filePath);
+            exportCallList.CreateFile();
         }
         public void InitializeImport(string masterDataFilepath, string routeNumberFilepath, string routeNumbersFilepath)
         {
@@ -30,10 +30,10 @@ namespace Logic
             csvImport.ImportContractors(masterDataFilepath);
             csvImport.ImportRouteNumbers(routeNumbersFilepath);
             csvImport.ImportOffers(routeNumberFilepath);
-            contractorList = csvImport.SendContractorListToContainer();
-            routeNumberList = csvImport.SendRouteNumberListToContainer();
-            ListContainer listContainer = ListContainer.GetInstance();
-            listContainer.GetLists(routeNumberList, contractorList);
+            _contractorList = csvImport.GetListOfContractors();
+            _routeNumberList = csvImport.GetListOfRouteNumbers();
+            ListContainer listContainer = ListContainer.Instance;
+            listContainer.SetLists(_routeNumberList, _contractorList);
         }
     }
 }
