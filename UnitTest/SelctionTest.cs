@@ -1,4 +1,8 @@
-﻿using Logic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Domain;
+using Logic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest
@@ -6,6 +10,134 @@ namespace UnitTest
     [TestClass]
     public class SelctionTest
     {
-       
+        [TestMethod]
+        public void TestMed3BudTilSammeRute()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+            List<Offer> outputListByUserId = listContainer.OutputList;
+
+            Assert.AreEqual(1, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(150, first.OperationPrice);
+            Assert.AreEqual(1, first.RouteID);
+            Assert.AreEqual(2, first.RequiredVehicleType);
+            //Assert.AreEqual(5, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jakob@supermail.com", first.UserID);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            //Console.WriteLine("hello");
+        }
+
+        [TestMethod]
+        public void TestContractorVinderIkkeFlereBudEndHanHarBilerTilOgVælgerBilligsteLøsning()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Contractor vinder ikke flere bud end han har biler til og vælger billigste l¢sning\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Contractor vinder ikke flere bud end han har biler til og vælger billigste l¢sning\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Contractor vinder ikke flere bud end han har biler til og vælger billigste l¢sning\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+            List<Offer> outputListByUserId = listContainer.OutputList;
+
+            Assert.AreEqual(2, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(150, first.OperationPrice);
+            Assert.AreEqual(1, first.RouteID);
+            Assert.AreEqual(2, first.RequiredVehicleType);
+            Assert.AreEqual(5, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jakob@supermail.com", first.UserID);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+
+            Offer second = outputListByUserId[1];
+            Assert.AreEqual(155, second.OperationPrice);
+            Assert.AreEqual(2, second.RouteID);
+            Assert.AreEqual(2, second.RequiredVehicleType);
+            Assert.AreEqual(int.MaxValue, second.DifferenceToNextOffer);
+            Assert.AreEqual("Jonatan@Megamail.com", second.UserID);
+            Assert.AreEqual(1, second.Contractor.NumberOfWonType2Offers);
+            //Console.WriteLine("hello");
+        }
+
+        [TestMethod]
+        public void TestVogntype3()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            //selectionController.SelectWinners();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+            var outputListByUserId = listContainer.OutputList;
+
+            Assert.AreEqual(2, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(149, first.OperationPrice);
+            Assert.AreEqual(96, first.RouteID);
+            Assert.AreEqual(3, first.RequiredVehicleType);
+            Assert.AreEqual(1, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jonatan@Megamail.com", first.UserID);
+            Assert.AreEqual(2, first.Contractor.NumberOfWonType3Offers);
+
+            Offer second = outputListByUserId[1];
+            Assert.AreEqual(149, second.OperationPrice);
+            Assert.AreEqual(104, second.RouteID);
+            Assert.AreEqual(3, second.RequiredVehicleType);
+            Assert.AreEqual(1, second.DifferenceToNextOffer);
+            Assert.AreEqual("Jonatan@Megamail.com", second.UserID);
+            Assert.AreEqual(2, second.Contractor.NumberOfWonType3Offers);
+            Console.WriteLine("hello");
+        }
+        [TestMethod]
+        public void MereEnd2BudMedSammePrisTilEnRute_IkkeVindende()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Mere end 2 bud med samme pris til en rute(Ikke vindende)\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Mere end 2 bud med samme pris til en rute(Ikke vindende)\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Mere end 2 bud med samme pris til en rute(Ikke vindende)\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+            List<Offer> outputListByUserId = listContainer.OutputList;
+
+            Assert.AreEqual(1, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(149, first.OperationPrice);
+            Assert.AreEqual(1, first.RouteID);
+            Assert.AreEqual(2, first.RequiredVehicleType);
+            //Assert.AreEqual(1, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jakob3@supermail.com", first.UserID);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual("4-001", first.OfferReferenceNumber);
+
+            //List<Offer> offers = listContainer.RouteNumberList[0].offers;
+            //Assert.AreEqual(1, offers[0].DifferenceToNextOffer);
+            //Assert.AreEqual(int.MaxValue, offers[1].DifferenceToNextOffer);
+            //Assert.AreEqual(int.MaxValue, offers[2].DifferenceToNextOffer);
+            //Assert.AreEqual(int.MaxValue, offers[3].DifferenceToNextOffer);
+
+            Assert.AreEqual(0, listContainer.ConflictList.Count);
+
+            Console.WriteLine("hello");
+        }
     }
 }

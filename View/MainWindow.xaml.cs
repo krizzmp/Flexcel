@@ -10,7 +10,7 @@ namespace View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         private readonly MainWindowViewModel _mainWindowViewModel = new MainWindowViewModel();
 
@@ -47,7 +47,6 @@ namespace View
                     TxtBoxFilePathRouteNumbers.Text
                 );
                 MessageBox.Show("Filerne er nu importeret");
-                _mainWindowViewModel.ImportDone = true;
             }
         }
 

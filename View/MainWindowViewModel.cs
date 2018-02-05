@@ -10,50 +10,44 @@ namespace View
 {
     public class MainWindowViewModel
     {
-        IOController iOController;
-        SelectionController selectionController;
-        OpenFileDialog openFileDialog;
-
-        public bool ImportDone { get; set; }
-        public bool SelectionDone { get; set; }
-
-        public MainWindowViewModel()
-        {
-            iOController = new IOController();
-            selectionController = new SelectionController();
-            ImportDone = false;
-        }
+        private readonly IOController _iOController = new IOController();
+        private bool _selectionDone = false;
+        private bool _importDone = false;
 
         public void ImportCSV(string masterDataFilepath, string routeNumberFilepath, string routeNumbersFilepath)
         {
-            iOController.InitializeImport(masterDataFilepath, routeNumberFilepath, routeNumbersFilepath);
+            _iOController.InitializeImport(masterDataFilepath, routeNumberFilepath, routeNumbersFilepath);
+            _importDone = true;
         }
         public string ChooseCSVFile()
         {
             string filename = "Ingen fil er valgt";
-            openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = false;
-            openFileDialog.Filter = "CVS filer (*.csv)|*.csv|All files (*.*)|*.*";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "CVS filer (*.csv)|*.csv|All files (*.*)|*.*"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 filename = openFileDialog.FileName;
-                return filename;
             }
             return filename;
         }
 
         public void SaveCSVCallFile()
         {
-            if (SelectionDone == true)
+            if (_selectionDone == true)
             {
-                SaveFileDialog saveDlg = new SaveFileDialog();
+                SaveFileDialog saveDlg = new SaveFileDialog
+                {
+                    Filter = "CSV filer (*.csv)|*.csv|All files (*.*)|*.*",
+                    InitialDirectory = @"C:\%USERNAME%\"
+                };
 
-                saveDlg.Filter = "CSV filer (*.csv)|*.csv|All files (*.*)|*.*";
-                saveDlg.InitialDirectory = @"C:\%USERNAME%\";
                 saveDlg.ShowDialog();
 
                 string path = saveDlg.FileName;
-                iOController.InitializeExportToCallingList(path);
+                _iOController.InitializeExportToCallingList(path);
                 MessageBox.Show("Filen er gemt.");
             }
             else
@@ -63,17 +57,19 @@ namespace View
         }
         public void SaveCSVPublishFile()
         {
-            if (SelectionDone == true)
+            if (_selectionDone == true)
             {
-                SaveFileDialog saveDlg = new SaveFileDialog();
+                SaveFileDialog saveDlg = new SaveFileDialog
+                {
+                    Filter = "CSV filer (*.csv)|*.csv|All files (*.*)|*.*",
+                    InitialDirectory = @"C:\%USERNAME%\"
+                };
 
-                saveDlg.Filter = "CSV filer (*.csv)|*.csv|All files (*.*)|*.*";
-                saveDlg.InitialDirectory = @"C:\%USERNAME%\";
                 saveDlg.ShowDialog();
 
                 string path = saveDlg.FileName;
 
-                iOController.InitializeExportToPublishList(path);
+                _iOController.InitializeExportToPublishList(path);
                 MessageBox.Show("Filen er gemt.");
             }
             else
@@ -83,21 +79,17 @@ namespace View
         }
         public List<Offer> InitializeSelection()
         {
-            if (ImportDone)
+            if (_importDone)
             {
-                SelectionDone = true;
+                _selectionDone = true;
             }
             else
             {
                 MessageBox.Show("Du skal importere filerne først.");
             }
-            selectionController.SelectWinners();
+            new SelectionController().Start();
             ListContainer listContainer = ListContainer.Instance;
-            List<Offer> outputListByUserId = listContainer.OutputList.OrderBy(x => x.UserID).ToList();
-            foreach (Offer offer in listContainer.OutputList)
-            {
-                offer.Contractor.CountNumberOfWonOffersOfEachType(listContainer.OutputList);
-            }
+            List<Offer> outputListByUserId = listContainer.OutputList;
             return outputListByUserId;
         }
     }

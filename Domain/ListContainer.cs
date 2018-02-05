@@ -1,20 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain
 {
     public sealed class ListContainer
     {
-        public List<RouteNumber> RouteNumberList;
-        public List<Contractor> ContractorList;
-        public readonly List<Offer> OutputList;
-        public readonly List<Offer> ConflictList;
+        public List<RouteNumber> RouteNumberList { get; private set; } = new List<RouteNumber>();
+        public List<Contractor> ContractorList { get; private set; } = new List<Contractor>();
+        public List<Offer> OutputList => RouteNumberList
+            .SelectMany(rn => rn.Offers)
+            .Where(o => o.Win && o.IsEligible)
+            .OrderBy(x => x.UserID)
+            .ToList();
+        
+        public List<Offer> ConflictList { get; } = new List<Offer>();
 
         private ListContainer()
         {
-            RouteNumberList = new List<RouteNumber>(); 
-            ContractorList = new List<Contractor>();
-            OutputList = new List<Offer>();
-            ConflictList = new List<Offer>();
         }
 
         public static ListContainer Instance { get; } = new ListContainer();

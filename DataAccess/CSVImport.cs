@@ -73,7 +73,7 @@ namespace DataAccess
                         Contractor contractor = ListOfContractors.Find(x => x.UserId == o.UserID);
                         try
                         {
-                            o.RequiredVehicleType = (ListOfRouteNumbers.Find(r => r.RouteID == o.RouteID))
+                            o.RequiredVehicleType = (ListOfRouteNumbers.Find(r => r.RouteId == o.RouteID))
                                 .RequiredVehicleType;
                             Offer newOffer = new Offer(o.OfferReferenceNumber, o.OperationPrice, o.RouteID, o.UserID,
                                 o.RouteNumberPriority, o.ContractorPriority, contractor, o.RequiredVehicleType);
@@ -91,9 +91,9 @@ namespace DataAccess
                 {
                     foreach (Offer offer in ListOfOffers)
                     {
-                        if (offer.RouteID == routeNumber.RouteID)
+                        if (offer.RouteID == routeNumber.RouteId)
                         {
-                            routeNumber.offers.Add(offer);
+                            routeNumber.Offers.Add(offer);
                         }
                     }
                 }
@@ -122,15 +122,15 @@ namespace DataAccess
                     .Select(x => x.Split(';'))
                     .Select(x => new RouteNumber
                         {
-                            RouteID = TryParseToIntElseZero(x[0]),
+                            RouteId = TryParseToIntElseZero(x[0]),
                             RequiredVehicleType = TryParseToIntElseZero(x[1]),
                         }
                     );
                 foreach (var r in data)
                 {
-                    bool doesAlreadyContain = ListOfRouteNumbers.Any(obj => obj.RouteID == r.RouteID);
+                    bool doesAlreadyContain = ListOfRouteNumbers.Any(obj => obj.RouteId == r.RouteId);
 
-                    if (!doesAlreadyContain && r.RouteID != 0 && r.RequiredVehicleType != 0)
+                    if (!doesAlreadyContain && r.RouteId != 0 && r.RequiredVehicleType != 0)
                     {
                         ListOfRouteNumbers.Add(r);
                     }
