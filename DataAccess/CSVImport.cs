@@ -59,44 +59,12 @@ namespace DataAccess
                     {
                         OfferReferenceNumber = x[0],
                         RouteID = TryParseToIntElseZero(x[1]),
-                        OperationPrice = TryParseToFloatElseZero((x[2])),
+                        OperationPrice = TryParseToFloatElseZero(x[2]),
                         UserID = x[5],
-                        CreateRouteNumberPriority = x[6],
-                        CreateContractorPriority = x[7],
-                    });
-                foreach (var o in data)
-                {
-                    if (o.UserID != "" || o.OperationPrice != 0)
-                    {
-                        o.RouteNumberPriority = TryParseToIntElseZero(o.CreateRouteNumberPriority);
-                        o.ContractorPriority = TryParseToIntElseZero(o.CreateContractorPriority);
-                        Contractor contractor = ListOfContractors.Find(x => x.UserId == o.UserID);
-                        try
-                        {
-                            o.RequiredVehicleType = (ListOfRouteNumbers.Find(r => r.RouteId == o.RouteID))
-                                .RequiredVehicleType;
-                            Offer newOffer = new Offer(o.OfferReferenceNumber, o.OperationPrice, o.RouteID, o.UserID,
-                                o.RouteNumberPriority, o.ContractorPriority, contractor, o.RequiredVehicleType);
-                            ListOfOffers.Add(newOffer);
-                        }
-                        catch
-                        {
-                            // Help for debugging purpose only.
-                            string failure = o.RouteID.ToString();
-                        }
-                    }
-                }
-
-                foreach (RouteNumber routeNumber in ListOfRouteNumbers)
-                {
-                    foreach (Offer offer in ListOfOffers)
-                    {
-                        if (offer.RouteID == routeNumber.RouteId)
-                        {
-                            routeNumber.Offers.Add(offer);
-                        }
-                    }
-                }
+                        RouteNumberPriority = TryParseToIntElseZero(x[6]),
+                        ContractorPriority = TryParseToIntElseZero(x[7]),
+                    }).Where(o => o.UserID != "" || o.OperationPrice != 0);
+                ListContainer.Instance.Offers = data.ToList();
             }
             catch (IndexOutOfRangeException)
             {
@@ -112,11 +80,10 @@ namespace DataAccess
             }
         }
 
-        public void ImportRouteNumbers(string routeNumbersFilepath)
+        public void ImportRouteNumbers(string filepath)
         {
             try
             {
-                string filepath = routeNumbersFilepath;
                 var data = File.ReadAllLines(filepath, _encoding)
                     .Skip(1)
                     .Select(x => x.Split(';'))
@@ -125,16 +92,19 @@ namespace DataAccess
                             RouteId = TryParseToIntElseZero(x[0]),
                             RequiredVehicleType = TryParseToIntElseZero(x[1]),
                         }
-                    );
-                foreach (var r in data)
-                {
-                    bool doesAlreadyContain = ListOfRouteNumbers.Any(obj => obj.RouteId == r.RouteId);
+                    )
+                    .Where(rn => rn.RouteId != 0 && rn.RequiredVehicleType != 0);
+                ListOfRouteNumbers.AddRange(data);
 
-                    if (!doesAlreadyContain && r.RouteId != 0 && r.RequiredVehicleType != 0)
-                    {
-                        ListOfRouteNumbers.Add(r);
-                    }
-                }
+                //foreach (var r in data)
+                //{
+                //    bool doesAlreadyContain = ListOfRouteNumbers.Any(obj => obj.RouteId == r.RouteId);
+
+                //    if (!doesAlreadyContain && r.RouteId != 0 && r.RequiredVehicleType != 0)
+                //    {
+                //        ListOfRouteNumbers.Add(r);
+                //    }
+                //}
             }
 
 
@@ -190,7 +160,7 @@ namespace DataAccess
         }
 
         public List<RouteNumber> GetListOfRouteNumbers()
-        { 
+        {
             return ListOfRouteNumbers;
         }
     }

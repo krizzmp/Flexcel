@@ -6,23 +6,12 @@ namespace Logic
 {
     public class SelectionController
     {
-        private List<RouteNumber> _sortedRouteNumberList;
         private readonly ListContainer _listContainer = ListContainer.Instance;
-
-        private void SortRouteNumberList(List<RouteNumber> routeNumberList)
-        {
-            _sortedRouteNumberList = routeNumberList.OrderBy(x => x.RouteId).ToList();
-            foreach (RouteNumber routeNumber in _sortedRouteNumberList)
-            {
-                routeNumber.Offers = routeNumber.Offers.OrderBy(x => x.OperationPrice)
-                    .ThenBy(x => x.RouteNumberPriority).ToList();
-            }
-        }
+        
 
 
         public void Start()
         {
-            SortRouteNumberList(_listContainer.RouteNumberList);
             bool t = true;
             do
             {
@@ -38,7 +27,7 @@ namespace Logic
 
         private void CalculateDifference()
         {
-            foreach (RouteNumber routeNumber in _sortedRouteNumberList)
+            foreach (RouteNumber routeNumber in _listContainer.RouteNumberList)
             {
                 routeNumber.CalculateDifference();
             }
@@ -46,7 +35,7 @@ namespace Logic
 
         private void AssignWinners()
         {
-            foreach (RouteNumber routeNumber in _sortedRouteNumberList)
+            foreach (RouteNumber routeNumber in _listContainer.RouteNumberList)
             {
                 routeNumber.AssignWinner();
             }

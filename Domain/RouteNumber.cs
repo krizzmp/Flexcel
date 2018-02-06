@@ -6,68 +6,51 @@ namespace Domain
 {
     public class RouteNumber
     {
-        public List<Offer> Offers { get; set; } = new List<Offer>();
+        public List<Offer> Offers => ListContainer.Instance.Offers.Where(offer => offer.RouteID == RouteId)
+            .OrderBy(x => x.OperationPrice)
+            .ThenBy(x => x.RouteNumberPriority).ToList();
+
         public int RouteId { get; set; }
         public int RequiredVehicleType { get; set; }
-        
+
         public void CalculateDifference()
         {
-            var eligibleOffers = Offers.Where(offer => offer.IsEligible);
+            var eligibleOffers = Offers.Where(offer => offer.IsEligible).ToList();
             int count = eligibleOffers.Count();
             const float lastOptionValue = int.MaxValue;
             switch (count)
             {
                 case 0:
                     throw new Exception("Der er ingen bud på garantivognsnummer " + RouteId);
-                case 1:
-                    Offers[0].DifferenceToNextOffer = lastOptionValue;
-                    break;
-                case 2:
-                    if (Offers[0].OperationPrice == Offers[1].OperationPrice)
+                default:
+
+                    var groupBy = eligibleOffers.GroupBy(o => o.OperationPrice).OrderBy(g => g.Key).ToList();
+                    for (int i = 0; i < groupBy.Count(); i++)
                     {
-                        Offers[0].DifferenceToNextOffer = lastOptionValue;
-                        Offers[1].DifferenceToNextOffer = lastOptionValue;
-                    }
-                    else
-                    {
-                        Offers[0].DifferenceToNextOffer = Offers[1].OperationPrice - Offers[0].OperationPrice;
-                        Offers[1].DifferenceToNextOffer = lastOptionValue;
+                        IGrouping<float, Offer> grouping = groupBy[i];
+                        foreach (Offer offer in grouping)
+                        {
+                            if (i == groupBy.Count() - 1) // if it is the last group
+                            {
+                                offer.DifferenceToNextOffer = lastOptionValue;
+                            }
+                            else
+                            {
+                                offer.DifferenceToNextOffer = groupBy[i + 1].Key - grouping.Key;
+                            }
+                        }
                     }
 
                     break;
-                default:
-                    var numbersToCalc = count - 1;
-                    for (int i = 0; i < numbersToCalc; i++)
-                    {
-                        float difference = 0;
-                        int j = i + 1;
-                        if (Offers[i].OperationPrice == Offers[numbersToCalc].OperationPrice)
-                        {
-                            while (difference == 0 && j <= numbersToCalc)
-                            {
-                                difference = Offers[j].OperationPrice - Offers[i].OperationPrice;
-                                j++;
-                            }
-                        }
-                        else
-                        {
-                            while (i < numbersToCalc)
-                            {
-                                Offers[i].DifferenceToNextOffer = lastOptionValue;
-                                i++;
-                            }
-                        }
-                        Offers[i].DifferenceToNextOffer = difference;
-                    }
-                    Offers[numbersToCalc].DifferenceToNextOffer = lastOptionValue;
-                    break;
             }
         }
+
         public void AssignWinner()
         {
             IEnumerable<Offer> eligibleOffers = Offers.Where(offer => offer.IsEligible).ToList();
             float min = eligibleOffers.Min(offer => offer.OperationPrice);
-            IEnumerable<Offer> cheapestOffers = eligibleOffers.Where(offer => Math.Abs(offer.OperationPrice - min) < 0.001).ToList();
+            IEnumerable<Offer> cheapestOffers =
+                eligibleOffers.Where(offer => Math.Abs(offer.OperationPrice - min) < 0.001).ToList();
             foreach (Offer cheapestOffer in cheapestOffers)
             {
                 cheapestOffer.Win = true;

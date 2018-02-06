@@ -21,7 +21,8 @@ namespace Logic
             csvImport.ImportRouteNumbers(routeNumbersFilepath);
             csvImport.ImportOffers(routeNumberFilepath);
             ListContainer listContainer = ListContainer.Instance;
-            listContainer.SetLists(csvImport.GetListOfRouteNumbers(), csvImport.GetListOfContractors());
+            listContainer.RouteNumberList = csvImport.GetListOfRouteNumbers();
+            listContainer.ContractorList = csvImport.GetListOfContractors();
         }
     }
 }

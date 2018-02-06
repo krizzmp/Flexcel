@@ -41,13 +41,12 @@ namespace Domain
         {
             get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 7);
         }
+
         public List<Offer> Offers
         {
-            get => ListContainer.Instance.RouteNumberList.SelectMany(rnl => rnl.Offers)
-                .Where(offer => offer.Contractor.UserId == UserId).ToList();
+            get => ListContainer.Instance.Offers.Where(offer => offer.Contractor.UserId == UserId).ToList();
         }
 
-        
 
         public bool MarkOvercommitedOffersIneligible()
         {
