@@ -6,59 +6,52 @@ namespace Domain
 {
     public class Contractor
     {
-        public string ReferenceNumberBasicInformationPdf { get; set; }
-        public string UserId { get; set; }
-        public string CompanyName { get; set; }
-        public string ManagerName { get; set; }
+        public string ReferenceNumberBasicInformationPdf { get; private set; }
+        public string UserId { get; private set; }
+        public string CompanyName { get; private set; }
+        public string ManagerName { get; private set; }
 
-        public int NumberOfType2PledgedVehicles { get; set; }
-        public int NumberOfType3PledgedVehicles { get; set; }
-        public int NumberOfType5PledgedVehicles { get; set; }
-        public int NumberOfType6PledgedVehicles { get; set; }
-        public int NumberOfType7PledgedVehicles { get; set; }
+        public int NumberOfType2PledgedVehicles { get; private set; }
+        public int NumberOfType3PledgedVehicles { get; private set; }
+        public int NumberOfType5PledgedVehicles { get; private set; }
+        public int NumberOfType6PledgedVehicles { get; private set; }
+        public int NumberOfType7PledgedVehicles { get; private set; }
 
-        public int NumberOfWonType2Offers
+        public int NumberOfWonType2Offers => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 2);
+        public int NumberOfWonType3Offers => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 3);
+        public int NumberOfWonType5Offers => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 5);
+        public int NumberOfWonType6Offers => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 6);
+        public int NumberOfWonType7Offers => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 7);
+
+        public List<Offer> Offers =>
+            ListContainer.Instance.Offers.Where(offer => offer.Contractor.UserId == UserId).ToList();
+
+        public Contractor(string referenceNumberBasicInformationPdf, string managerName, string companyName,
+            string userId, string type2Amount, string type3Amount,
+            string type5Amount, string type6Amount,
+            string type7Amount)
         {
-            get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 2);
+            ReferenceNumberBasicInformationPdf = referenceNumberBasicInformationPdf;
+            ManagerName = managerName;
+            CompanyName = companyName;
+            UserId = userId;
+            NumberOfType2PledgedVehicles = int.Parse(type2Amount.Trim());
+            NumberOfType3PledgedVehicles = int.Parse(type3Amount.Trim());
+            NumberOfType5PledgedVehicles = int.Parse(type5Amount.Trim());
+            NumberOfType6PledgedVehicles = int.Parse(type6Amount.Trim());
+            NumberOfType7PledgedVehicles = int.Parse(type7Amount.Trim());
         }
-
-        public int NumberOfWonType3Offers
-        {
-            get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 3);
-        }
-
-        public int NumberOfWonType5Offers
-        {
-            get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 5);
-        }
-
-        public int NumberOfWonType6Offers
-        {
-            get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 6);
-        }
-
-        public int NumberOfWonType7Offers
-        {
-            get => Offers.Count(o => o.Win && o.IsEligible && o.RequiredVehicleType == 7);
-        }
-
-        public List<Offer> Offers
-        {
-            get => ListContainer.Instance.Offers.Where(offer => offer.Contractor.UserId == UserId).ToList();
-        }
-
 
         public bool MarkOvercommitedOffersIneligible()
         {
-            var winningOffers = Offers.Where(offer => offer.Win && offer.IsEligible);
-            var groupBy = winningOffers.GroupBy(o => o.RequiredVehicleType);
+            var winningOffersByVehicleType = Offers.Where(offer => offer.Win && offer.IsEligible)
+                .GroupBy(o => o.RequiredVehicleType);
             var didMarkIneligible = false;
-            foreach (IGrouping<int, Offer> grouping in groupBy)
+            foreach (IGrouping<int, Offer> winningOffers in winningOffersByVehicleType)
             {
-                //var offers = grouping.Where(offer => offer.IsEligible);
-                for (var offers = grouping.Where(offer => offer.IsEligible);
-                    offers.Count() > NumberOfPledgedVehiclesOfType(grouping.Key);
-                    offers = grouping.Where(offer => offer.IsEligible))
+                var offers = winningOffers.Where(offer => offer.IsEligible);
+                int numberOfPledgedVehicles = NumberOfPledgedVehiclesOfType(winningOffers.Key);
+                while (offers.Count() > numberOfPledgedVehicles)
                 {
                     if (MarkOfferWithSmallestDifferenceToNextOfferIneligible(offers))
                     {

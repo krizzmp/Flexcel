@@ -49,8 +49,7 @@ namespace Domain
         {
             IEnumerable<Offer> eligibleOffers = Offers.Where(offer => offer.IsEligible).ToList();
             float min = eligibleOffers.Min(offer => offer.OperationPrice);
-            IEnumerable<Offer> cheapestOffers =
-                eligibleOffers.Where(offer => Math.Abs(offer.OperationPrice - min) < 0.001).ToList();
+            IEnumerable<Offer> cheapestOffers = eligibleOffers.Where(offer => offer.OperationPrice == min).ToList();
             foreach (Offer cheapestOffer in cheapestOffers)
             {
                 cheapestOffer.Win = true;

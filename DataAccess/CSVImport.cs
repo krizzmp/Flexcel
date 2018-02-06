@@ -125,19 +125,8 @@ namespace DataAccess
                 var data = File.ReadAllLines(filepath, _encoding)
                     .Skip(1)
                     .Select(x => x.Split(';'))
-                    .Select(x => new Contractor
-                        {
-                            ReferenceNumberBasicInformationPdf = x[0],
-                            ManagerName = x[1],
-                            CompanyName = x[2],
-                            UserId = x[3],
-                            NumberOfType2PledgedVehicles = TryParseToIntElseZero(x[4]),
-                            NumberOfType3PledgedVehicles = TryParseToIntElseZero(x[5]),
-                            NumberOfType5PledgedVehicles = TryParseToIntElseZero(x[6]),
-                            NumberOfType6PledgedVehicles = TryParseToIntElseZero(x[7]),
-                            NumberOfType7PledgedVehicles = TryParseToIntElseZero(x[8])
-                        }
-                    ).Where(c => c.UserId != "");
+                    .Select(x => new Contractor(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]))
+                    .Where(c => c.UserId != "");
                 ListOfContractors.AddRange(data);
             }
             catch (IndexOutOfRangeException)
