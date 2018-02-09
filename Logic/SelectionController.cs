@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Domain;
 
 namespace Logic
@@ -7,8 +6,6 @@ namespace Logic
     public class SelectionController
     {
         private readonly ListContainer _listContainer = ListContainer.Instance;
-        
-
 
         public void Start()
         {
@@ -21,8 +18,17 @@ namespace Logic
             } while (t);
 
             // when no more OvercommitedOffers
-            //FailIfRouteHasMultipleWinners();
+            PrioritizeMultipleWinners();
             //FailIfRouteHasZeroWinners();
+            // zero bids on routenumber is already handled
+        }
+
+        private void PrioritizeMultipleWinners()
+        {
+            foreach (RouteNumber routeNumber in _listContainer.RouteNumberList)
+            {
+                routeNumber.FailForMultipleWinners();
+            }
         }
 
         private void CalculateDifference()
@@ -43,11 +49,6 @@ namespace Logic
 
         private bool MarkOvercommitedOffersIneligible()
         {
-            //foreach (Contractor contractor in _listContainer.ContractorList)
-            //{
-            //    contractor.MarkOvercommitedOffersIneligible();
-            //}
-
             return _listContainer.ContractorList.Any(contractor => contractor.MarkOvercommitedOffersIneligible());
         }
     }

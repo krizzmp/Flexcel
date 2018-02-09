@@ -30,7 +30,7 @@ namespace UnitTest
             Assert.AreEqual(150, first.OperationPrice);
             Assert.AreEqual(1, first.RouteID);
             Assert.AreEqual(2, first.RequiredVehicleType);
-            //Assert.AreEqual(5, first.DifferenceToNextOffer);
+            Assert.AreEqual(5, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
             Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
             //Console.WriteLine("hello");
@@ -124,20 +124,120 @@ namespace UnitTest
             Assert.AreEqual(149, first.OperationPrice);
             Assert.AreEqual(1, first.RouteID);
             Assert.AreEqual(2, first.RequiredVehicleType);
-            //Assert.AreEqual(1, first.DifferenceToNextOffer);
+            Assert.AreEqual(1, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob3@supermail.com", first.UserID);
             Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
             Assert.AreEqual("4-001", first.OfferReferenceNumber);
 
-            //List<Offer> offers = listContainer.RouteNumberList[0].offers;
-            //Assert.AreEqual(1, offers[0].DifferenceToNextOffer);
-            //Assert.AreEqual(int.MaxValue, offers[1].DifferenceToNextOffer);
-            //Assert.AreEqual(int.MaxValue, offers[2].DifferenceToNextOffer);
-            //Assert.AreEqual(int.MaxValue, offers[3].DifferenceToNextOffer);
+            List<Offer> offers = listContainer.RouteNumberList[0].Offers;
+            Assert.AreEqual(1, offers[0].DifferenceToNextOffer);
+            Assert.AreEqual(int.MaxValue, offers[1].DifferenceToNextOffer);
+            Assert.AreEqual(int.MaxValue, offers[2].DifferenceToNextOffer);
+            Assert.AreEqual(int.MaxValue, offers[3].DifferenceToNextOffer);
 
             Assert.AreEqual(0, listContainer.ConflictList.Count);
 
             Console.WriteLine("hello");
+        }
+        [TestMethod]
+        public void ManglendeTilbudTilEnRute()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+
+            try
+            {
+                selectionController.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
+
+            Assert.Fail();
+        }
+        [TestMethod]
+        public void BrugForPrioriteringVedRutenummer()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+
+            try
+            {
+                selectionController.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
+
+            Assert.Fail();
+        }
+        [TestMethod]
+        public void BrugForPrioriteringVedRutenummerLøsning1()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+
+            List<Offer> outputListByUserId = listContainer.OutputList.OrderBy(x => x.UserID).ToList();
+
+            Assert.AreEqual(1, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(150, first.OperationPrice);
+            Assert.AreEqual(1, first.RouteID);
+            Assert.AreEqual(2, first.RequiredVehicleType);
+            Assert.AreEqual(int.MaxValue, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jakob@supermail.com", first.UserID);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.RouteNumberPriority);
+
+        }
+        [TestMethod]
+        public void BrugForPrioriteringVedRutenummerLøsning1_2()
+        {
+            IOController ioController = new IOController();
+            ioController.InitializeImport(
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1-2\Stamoplysninger_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1-2\Tilbud_FakeData.csv",
+                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1-2\RouteNumbers.csv"
+            );
+            var selectionController = new SelectionController();
+            selectionController.Start();
+
+            ListContainer listContainer = ListContainer.Instance;
+
+            List<Offer> outputListByUserId = listContainer.OutputList.OrderBy(x => x.UserID).ToList();
+
+            Assert.AreEqual(1, outputListByUserId.Count);
+            Offer first = outputListByUserId.First();
+            Assert.AreEqual(150, first.OperationPrice);
+            Assert.AreEqual(1, first.RouteID);
+            Assert.AreEqual(2, first.RequiredVehicleType);
+            Assert.AreEqual(int.MaxValue, first.DifferenceToNextOffer);
+            Assert.AreEqual("Jonatan@Megamail.com", first.UserID);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(2, first.RouteNumberPriority);
+
         }
     }
 }
