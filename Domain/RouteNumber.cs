@@ -86,9 +86,10 @@ namespace Domain
 
     static class Extra
     {
-        public static IEnumerable<Offer> MaxAll(this IEnumerable<Offer> enumerable, int num = 1)
+        public static IEnumerable<Offer> MaxAll(this IEnumerable<Offer> enumerable)
         {
-            return enumerable.Where(x => x.RouteNumberPriority == enumerable.Max(arg => arg.RouteNumberPriority));
+            var offers = enumerable.ToList();
+            return offers.Where(x => x.RouteNumberPriority == offers.Max(arg => arg.RouteNumberPriority));
         }
     }
 }
