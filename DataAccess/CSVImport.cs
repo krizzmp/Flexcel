@@ -6,86 +6,33 @@ using System.IO;
 
 namespace DataAccess
 {
-    public class CSVImport
+    public class CSVImport 
     {
         private readonly Encoding _encoding;
+        private readonly OfferLoader _offerLoader;
+        private readonly RouteNumberLoader _routeNumberLoader;
+        private readonly ContractorLoader _contractorLoader;
 
         public CSVImport()
         {
-            _encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding encoding = Encoding.GetEncoding("iso-8859-1");
+            _offerLoader = new OfferLoader(encoding);
+            _routeNumberLoader = new RouteNumberLoader(encoding);
+            _contractorLoader = new ContractorLoader(encoding);
         }
+        
 
-        public void ImportOffers(string filepath)
+        public void LoadOffers(string filepath)
         {
-            try
-            {
-                var data = File.ReadAllLines(filepath, _encoding)
-                    .Skip(1)
-                    .Select(x => x.Split(';'))
-                    .Select(x => new Offer(x[0], x[1], x[2], x[5], x[6], x[7]))
-                    .Where(o => o.UserID != "" || o.OperationPrice != 0);
-                ListContainer.Instance.Offers = data.ToList();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new IndexOutOfRangeException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
-            catch (FormatException)
-            {
-                throw new FormatException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
-            catch (Exception)
-            {
-                throw new Exception("Fejl, filerne blev ikke importeret");
-            }
+            _offerLoader.Load(filepath);
         }
-
-        public void ImportRouteNumbers(string filepath)
+        public void LoadRouteNumbers(string filepath)
         {
-            try
-            {
-                var data = File.ReadAllLines(filepath, _encoding)
-                    .Skip(1)
-                    .Select(x => x.Split(';'))
-                    .Select(x => new RouteNumber(x[0], x[1]))
-                    .Where(rn => rn.RouteId != 0 && rn.RequiredVehicleType != 0);
-                ListContainer.Instance.RouteNumberList = data.ToList();
-            }
-
-
-            catch (IndexOutOfRangeException)
-            {
-                throw new IndexOutOfRangeException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
-            catch (FormatException)
-            {
-                throw new FormatException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
+            _routeNumberLoader.Load(filepath);
         }
-
-        public void ImportContractors(string filepath)
+        public void LoadConctractors(string filepath)
         {
-            try
-            {
-                var data = File.ReadAllLines(filepath, _encoding)
-                    .Skip(1)
-                    .Select(x => x.Split(';'))
-                    .Select(x => new Contractor(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]))
-                    .Where(c => c.UserId != "");
-                ListContainer.Instance.ContractorList = data.ToList();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new IndexOutOfRangeException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
-            catch (FormatException)
-            {
-                throw new FormatException("Fejl, er du sikker på du har valgt den rigtige fil?");
-            }
-            catch (Exception)
-            {
-                throw new Exception("Fejl, filerne blev ikke importeret");
-            }
+            _contractorLoader.Load(filepath);
         }
     }
 }
