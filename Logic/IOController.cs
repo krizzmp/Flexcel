@@ -5,35 +5,21 @@ using DataAccess;
 namespace Logic
 {
     public class IOController
-    {
-        List<RouteNumber> routeNumberList;
-        List<Contractor> contractorList;
-
-        public IOController()
-        {
-            routeNumberList = new List<RouteNumber>();
-        }
-       
+    {  
         public void InitializeExportToPublishList(string filePath)
         {
-            CSVExportToPublishList ExportToPublishList = new CSVExportToPublishList(filePath);
-            ExportToPublishList.CreateFile(); 
+            CSVExportToPublishList.CreateFile(filePath); 
         }
         public void InitializeExportToCallingList(string filePath)
         {
-            CSVExportToCallList ExportCallList = new CSVExportToCallList(filePath);
-            ExportCallList.CreateFile();
+            CSVExportToCallList.CreateFile(filePath);
         }
-        public void InitializeImport(string masterDataFilepath, string routeNumberFilepath)
+        public void InitializeImport(string masterDataFilepath, string routeNumberFilepath, string routeNumbersFilepath)
         {
             CSVImport csvImport = new CSVImport();
-            csvImport.ImportContractors(masterDataFilepath);
-            csvImport.ImportRouteNumbers();
-            csvImport.ImportOffers(routeNumberFilepath);
-            contractorList = csvImport.SendContractorListToContainer();
-            routeNumberList = csvImport.SendRouteNumberListToContainer();
-            ListContainer listContainer = ListContainer.GetInstance();
-            listContainer.GetLists(routeNumberList, contractorList);
+            csvImport.LoadConctractors(masterDataFilepath);
+            csvImport.LoadRouteNumbers(routeNumbersFilepath);
+            csvImport.LoadOffers(routeNumberFilepath);
         }
     }
 }

@@ -85,7 +85,7 @@
                 Style="{StaticResource ButtonTemplateMedium}"
                 Content="Færdig"
                 Margin="0,0,9.6,9.6"
-                Click="btnPromptOkay_Click"
+                Click="BtnPromptOkayClick"
                 Width="76"
                 Height="20"
                 VerticalAlignment="Bottom"

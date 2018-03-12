@@ -8,39 +8,26 @@ namespace DataAccess
 {
     public class CSVExportToPublishList
     {
-        private readonly Encoding encoding;
-        private readonly string FilePath;
-        private readonly ListContainer listContainer;
-        private readonly List<Offer> winningOfferList;
-
-        public CSVExportToPublishList(string filePath)
-        {
-            FilePath = filePath;
-            listContainer = ListContainer.GetInstance();
-            winningOfferList = listContainer.outputList;
-            encoding = Encoding.GetEncoding("iso-8859-1");
-        }
-
-        public void CreateFile()
+        public static void CreateFile(string filePath)
         {
             try
             {
                 // Delete the file if it exists.
-                if (File.Exists(FilePath))
+                if (File.Exists(filePath))
                 {
                     // Note that no lock is put on the
                     // file and the possibility exists
                     // that another process could do
                     // something with it between
                     // the calls to Exists and Delete.
-                    File.Delete(FilePath);
+                    File.Delete(filePath);
                 }
 
                 // Create the file.
-                using (StreamWriter streamWriter = new StreamWriter(FilePath, true, encoding))
+                using (StreamWriter streamWriter = new StreamWriter(filePath, true, Encoding.GetEncoding("iso-8859-1")))
                 {
                     streamWriter.WriteLine("Garantivognsnummer" + ";" + "Virksomhedsnavn" + ";" + "Pris" + ";");
-                    foreach (Offer offer in winningOfferList)
+                    foreach (Offer offer in ListContainer.Instance.OutputList)
                     {
                         streamWriter.WriteLine(offer.RouteID + ";" + offer.Contractor.CompanyName + ";" +
                                                offer.OperationPrice + ";");
@@ -50,7 +37,7 @@ namespace DataAccess
                 }
 
                 // Open the stream and read it back.
-                using (StreamReader sr = File.OpenText(FilePath))
+                using (StreamReader sr = File.OpenText(filePath))
                 {
                     string s = "";
                     while ((s = sr.ReadLine()) != null)

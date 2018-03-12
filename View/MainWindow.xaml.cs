@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using Domain;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace View
 {
@@ -12,7 +12,7 @@ namespace View
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+        private readonly MainWindowViewModel _mainWindowViewModel = new MainWindowViewModel();
 
         public MainWindow()
         {
@@ -21,43 +21,41 @@ namespace View
 
         private void BtnMasterDataFilePathSelect_Click(object sender, RoutedEventArgs e)
         {
-            txtBoxFilePathMasterData.Text = mainWindowViewModel.ChooseCSVFile();
+            TxtBoxFilePathMasterData.Text = _mainWindowViewModel.ChooseCSVFile();
         }
+
         private void BtnRouteNumberFilePathSelect_Click(object sender, RoutedEventArgs e)
         {
-            txtBoxFilePathRouteNumberOffer.Text = mainWindowViewModel.ChooseCSVFile();
+            TxtBoxFilePathRouteNumberOffer.Text = _mainWindowViewModel.ChooseCSVFile();
         }
+
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
-                if (txtBoxFilePathMasterData.Text.ToString().Equals("") || txtBoxFilePathRouteNumberOffer.Text.ToString().Equals(""))
-                {
-                    MessageBox.Show("Vælg venligst begge filer inden import startes");
-                }
-                else if ((txtBoxFilePathMasterData.Text.ToString().Equals("") && txtBoxFilePathRouteNumberOffer.Text.ToString().Equals("")))
-                {
-                    MessageBox.Show("Vælg venligst filerne inden import startes");
-                }
-                else
-                {
-                    mainWindowViewModel.ImportCSV(txtBoxFilePathMasterData.Text.ToString(), txtBoxFilePathRouteNumberOffer.Text.ToString());
-                    MessageBox.Show("Filerne er nu importeret");
-                    mainWindowViewModel.ImportDone = true;
-                }
-            
-
+            if (TxtBoxFilePathMasterData.Text.Equals("") || TxtBoxFilePathRouteNumberOffer.Text.Equals(""))
+            {
+                MessageBox.Show("Vælg venligst begge filer inden import startes");
+            }
+            else if (TxtBoxFilePathMasterData.Text.Equals("") && TxtBoxFilePathRouteNumberOffer.Text.Equals(""))
+            {
+                MessageBox.Show("Vælg venligst filerne inden import startes");
+            }
+            else
+            {
+                _mainWindowViewModel.ImportCSV(
+                    TxtBoxFilePathMasterData.Text,
+                    TxtBoxFilePathRouteNumberOffer.Text,
+                    TxtBoxFilePathRouteNumbers.Text
+                );
+                MessageBox.Show("Filerne er nu importeret");
+            }
         }
+
         private void BtnStartSelection_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                mainWindowViewModel.InitializeSelection();
-                ListContainer listContainer = ListContainer.GetInstance();
-                List<Offer> outputListByUserID = listContainer.outputList.OrderBy(x => x.UserID).ToList();
-                listView.ItemsSource = outputListByUserID;
-                foreach(Offer offer in listContainer.outputList)
-                {
-                    offer.Contractor.CountNumberOfWonOffersOfEachType(listContainer.outputList); 
-                }
+                List<Offer> outputListByUserId = _mainWindowViewModel.InitializeSelection();
+                ListView.ItemsSource = outputListByUserId;
                 MessageBox.Show("Udvælgelsen er nu færdig");
             }
             catch (Exception x)
@@ -66,18 +64,18 @@ namespace View
                 promptWindow.Show();
             }
         }
-      
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
             Environment.Exit(1);
         }
 
-        private void btnSavePublic_Click(object sender, RoutedEventArgs e)
+        private void BtnSavePublic_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                mainWindowViewModel.SaveCSVPublishFile();
+                _mainWindowViewModel.SaveCSVPublishFile();
             }
             catch (Exception x)
             {
@@ -85,12 +83,12 @@ namespace View
             }
         }
 
-        private void btnSaveCall_Click(object sender, RoutedEventArgs e)
+        private void BtnSaveCall_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                mainWindowViewModel.SaveCSVCallFile();
-            }          
+                _mainWindowViewModel.SaveCSVCallFile();
+            }
             catch (Exception x)
             {
                 MessageBox.Show(x.Message);

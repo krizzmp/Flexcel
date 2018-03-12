@@ -10,16 +10,16 @@ namespace View
     /// </summary>
     public partial class PromptWindow : Window
     {
-        private readonly ListContainer listContainer = ListContainer.GetInstance();
+        private readonly ListContainer _listContainer = ListContainer.Instance;
 
         public PromptWindow(string message)
         {
             InitializeComponent();
-            listView.ItemsSource = listContainer.conflictList;
+            listView.ItemsSource = _listContainer.ConflictList;
             tbConflictMessage.Text = message;
         }
 
-        private void btnPromptOkay_Click(object sender, RoutedEventArgs e)
+        private void BtnPromptOkayClick(object sender, RoutedEventArgs e)
         {
             Environment.Exit(1);
         }

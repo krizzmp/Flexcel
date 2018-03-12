@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IOController.cs" />
-    <Compile Include="Selection.cs" />
     <Compile Include="SelectionController.cs" />
   </ItemGroup>
   <ItemGroup>
