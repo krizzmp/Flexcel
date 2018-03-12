@@ -26,9 +26,15 @@ namespace Domain
         public List<Offer> Offers =>
             ListContainer.Instance.Offers.Where(offer => offer.Contractor.UserId == UserId).ToList();
 
-        public Contractor(string referenceNumberBasicInformationPdf, string managerName, string companyName,
-            string userId, string type2Amount, string type3Amount,
-            string type5Amount, string type6Amount,
+        public Contractor(
+            string referenceNumberBasicInformationPdf,
+            string managerName,
+            string companyName,
+            string userId,
+            string type2Amount,
+            string type3Amount,
+            string type5Amount,
+            string type6Amount,
             string type7Amount)
         {
             ReferenceNumberBasicInformationPdf = referenceNumberBasicInformationPdf;

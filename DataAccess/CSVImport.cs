@@ -1,17 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Domain;
-using System.IO;
+﻿using System.Text;
 
 namespace DataAccess
 {
-    public class CSVImport 
+    public class CSVImport
     {
-        private readonly Encoding _encoding;
+        
+        private readonly ContractorLoader _contractorLoader;
         private readonly OfferLoader _offerLoader;
         private readonly RouteNumberLoader _routeNumberLoader;
-        private readonly ContractorLoader _contractorLoader;
 
         public CSVImport()
         {
@@ -20,16 +16,18 @@ namespace DataAccess
             _routeNumberLoader = new RouteNumberLoader(encoding);
             _contractorLoader = new ContractorLoader(encoding);
         }
-        
+
 
         public void LoadOffers(string filepath)
         {
             _offerLoader.Load(filepath);
         }
+
         public void LoadRouteNumbers(string filepath)
         {
             _routeNumberLoader.Load(filepath);
         }
+
         public void LoadConctractors(string filepath)
         {
             _contractorLoader.Load(filepath);

@@ -21,42 +21,30 @@ namespace Domain
 
         public Offer(string offerReferenceNumber, string routeId, string operationPrice, string userId,
             string routeNumberPriority, string contractorPriority)
-        {
+        {   
             OfferReferenceNumber = offerReferenceNumber;
-            RouteID = TryParseToIntElseZero(routeId);
-            OperationPrice = TryParseToFloatElseZero(operationPrice);
+            RouteID = ParseToIntElseZero(routeId);
+            OperationPrice = ParseToFloatElseZero(operationPrice);
             UserID = userId;
-            RouteNumberPriority = TryParseToIntElseZero(routeNumberPriority);
-            ContractorPriority = TryParseToIntElseZero(contractorPriority);
+            RouteNumberPriority = ParseToIntElseZero(routeNumberPriority);
+            ContractorPriority = ParseToIntElseZero(contractorPriority);
         }
 
-        private int TryParseToIntElseZero(string str)
+        private static int ParseToIntElseZero(string str)
         {
-            if (str == string.Empty)
-            {
-                return 0;
-            }
-            return int.Parse(str.Trim());
+
+            int.TryParse(str.Trim(), out int n);
+            return n;
         }
 
-        private float TryParseToFloatElseZero(string toParse)
+        private static float ParseToFloatElseZero(string toParse)
         {
-            string CurrentCultureName = Thread.CurrentThread.CurrentCulture.Name;
-            CultureInfo cultureInformation = new CultureInfo(CurrentCultureName);
-            if (cultureInformation.NumberFormat.NumberDecimalSeparator != ",")
-                // Forcing use of decimal separator for numerical values
-            {
-                cultureInformation.NumberFormat.NumberDecimalSeparator = ",";
-                Thread.CurrentThread.CurrentCulture = cultureInformation;
-            }
-
-            float number;
-            toParse = toParse.Replace(" ", "");
-            bool tryParse = float.TryParse(toParse.Replace('.', ','), out number);
-            cultureInformation = new CultureInfo(CurrentCultureName);
+            string currentCultureName = Thread.CurrentThread.CurrentCulture.Name;
+            CultureInfo cultureInformation = new CultureInfo(currentCultureName);
             cultureInformation.NumberFormat.NumberDecimalSeparator = ",";
-            return number;
-
+            toParse = toParse.Replace(" ", "");
+            float.TryParse(toParse.Replace('.', ','), NumberStyles.Float, cultureInformation, out float n);
+            return n;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace View
             tbConflictMessage.Text = message;
         }
 
-        private void btnPromptOkay_Click(object sender, RoutedEventArgs e)
+        private void BtnPromptOkayClick(object sender, RoutedEventArgs e)
         {
             Environment.Exit(1);
         }
