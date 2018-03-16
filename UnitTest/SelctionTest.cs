@@ -13,7 +13,7 @@ namespace UnitTest
         [TestMethod]
         public void TestMed3BudTilSammeRute()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Tilbud_FakeData.csv",
@@ -39,7 +39,7 @@ namespace UnitTest
         [TestMethod]
         public void TestContractorVinderIkkeFlereBudEndHanHarBilerTilOgVælgerBilligsteLøsning()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Contractor vinder ikke flere bud end han har biler til og vælger billigste l¢sning\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Contractor vinder ikke flere bud end han har biler til og vælger billigste l¢sning\Tilbud_FakeData.csv",
@@ -73,7 +73,7 @@ namespace UnitTest
         [TestMethod]
         public void TestVogntype3()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\Tilbud_FakeData.csv",
@@ -107,7 +107,7 @@ namespace UnitTest
         [TestMethod]
         public void MereEnd2BudMedSammePrisTilEnRute_IkkeVindende()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Mere end 2 bud med samme pris til en rute(Ikke vindende)\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Mere end 2 bud med samme pris til en rute(Ikke vindende)\Tilbud_FakeData.csv",
@@ -142,7 +142,7 @@ namespace UnitTest
         [TestMethod]
         public void ManglendeTilbudTilEnRute()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Manglende tilbud til en rute\Tilbud_FakeData.csv",
@@ -165,7 +165,7 @@ namespace UnitTest
         [TestMethod]
         public void BrugForPrioriteringVedRutenummer()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\Tilbud_FakeData.csv",
@@ -188,7 +188,7 @@ namespace UnitTest
         [TestMethod]
         public void BrugForPrioriteringVedRutenummerLøsning1()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1\Tilbud_FakeData.csv",
@@ -215,7 +215,7 @@ namespace UnitTest
         [TestMethod]
         public void BrugForPrioriteringVedRutenummerLøsning1_2()
         {
-            IOController ioController = new IOController();
+            IoController ioController = new IoController();
             ioController.InitializeImport(
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1-2\Stamoplysninger_FakeData.csv",
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Brug for prioritering ved Rutenummer\L¢sning1-2\Tilbud_FakeData.csv",

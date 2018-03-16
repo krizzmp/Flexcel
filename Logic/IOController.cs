@@ -4,7 +4,7 @@ using DataAccess;
 
 namespace Logic
 {
-    public class IOController
+    public class IoController : IControllerInterface 
     {  
         public void InitializeExportToPublishList(string filePath)
         {
