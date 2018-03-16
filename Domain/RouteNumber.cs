@@ -30,6 +30,7 @@ namespace Domain
             }
             else
             {
+                // we group by opertion price
                 var groupBy = eligibleOffers.GroupBy(o => o.OperationPrice).OrderBy(g => g.Key).ToList();
                 for (int i = 0; i < groupBy.Count(); i++)
                 {
@@ -78,7 +79,7 @@ namespace Domain
                 }
                 else
                 {
-                    throw new ApplicationException("multible winners");
+                    throw new ApplicationException("multiple winners");
                 }
             }
         }
