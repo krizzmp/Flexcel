@@ -10,7 +10,7 @@ namespace View
 {
     public class MainWindowViewModel
     {
-        private readonly IOController _iOController = new IOController();
+        private readonly IoController _iOController = new IoController();
         private bool _selectionDone = false;
         private bool _importDone = false;
 
