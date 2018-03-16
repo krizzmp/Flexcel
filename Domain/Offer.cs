@@ -5,8 +5,12 @@ namespace Domain
 {
     public class Offer
     {
+        private readonly float _operationPrice;
+        private float Hours => ListContainer.Instance.RouteNumberList.Find(r => r.RouteId == RouteID).RequiredHours;
         public string OfferReferenceNumber { get; }
-        public float OperationPrice { get; }
+
+        public float OperationPrice => _operationPrice * Hours;
+        
         public bool IsEligible { get; set; } = true;
 
         public int RequiredVehicleType => ListContainer.Instance.RouteNumberList.Find(r => r.RouteId == RouteID).RequiredVehicleType;
@@ -24,7 +28,7 @@ namespace Domain
         {   
             OfferReferenceNumber = offerReferenceNumber;
             RouteID = ParseToIntElseZero(routeId);
-            OperationPrice = ParseToFloatElseZero(operationPrice);
+            _operationPrice = ParseToFloatElseZero(operationPrice);
             UserID = userId;
             RouteNumberPriority = ParseToIntElseZero(routeNumberPriority);
             ContractorPriority = ParseToIntElseZero(contractorPriority);
@@ -46,5 +50,10 @@ namespace Domain
             float.TryParse(toParse.Replace('.', ','), NumberStyles.Float, cultureInformation, out float n);
             return n;
         }
+    }
+
+    public class Price
+    {
+
     }
 }

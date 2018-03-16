@@ -18,6 +18,7 @@ namespace Domain
 
         public int RouteId { get; private set; }
         public int RequiredVehicleType { get; private set; }
+        public float RequiredHours { get; private set; }
 
         public void CalculateDifference()
         {
