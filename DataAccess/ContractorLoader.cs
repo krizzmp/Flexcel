@@ -21,7 +21,7 @@ namespace DataAccess
             {
                 var data = File.ReadAllLines(filepath, _encoding)
                     .Skip(1)
-                    .Select(x => x.Split(';'))
+                    .Select((string x) => x.Split(';'))
                     .Select(x => new Contractor(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]))
                     .Where(c => c.UserId != "");
                 ListContainer.Instance.ContractorList = data.ToList();
