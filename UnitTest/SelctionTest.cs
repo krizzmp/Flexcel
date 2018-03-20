@@ -13,12 +13,22 @@ namespace UnitTest
         [TestMethod]
         public void TestMed3BudTilSammeRute()
         {
-            IoController ioController = new IoController();
-            ioController.InitializeImport(
-                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Stamoplysninger_FakeData.csv",
-                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\Tilbud_FakeData.csv",
-                @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Test med 3 bud til samme rute\RouteNumbers.csv"
-            );
+            var data = new List<Contractor> {
+                new Contractor("16-1", "Jakob", "Jakobs Virksomhed", "Jakob@supermail.com", "3", "1", "0", "0", "10"),
+                new Contractor("16-2", "Jonatan", "Jonatans Virksomhed", "Jonatan@Megamail.com", "5", "5", "5", "5", "5")
+            };
+            ListContainer.Instance.ContractorList = data;
+            var data2 = new List<Offer> {
+                new Offer("1-001", "1", "150","Jakob@supermail.com","", ""),
+                new Offer("2-001", "1", "155","Jonatan@Megamail.com","", ""),
+                new Offer("2-002", "1", "155","Jonatan@Megamail.com","", ""),
+                };
+            ListContainer.Instance.Offers = data2;
+
+            var data3 = new List<RouteNumber> {
+                new RouteNumber("1","2")
+            };
+            ListContainer.Instance.RouteNumberList = data3;
             var selectionController = new SelectionController();
             selectionController.Start();
 
@@ -33,7 +43,6 @@ namespace UnitTest
             Assert.AreEqual(5, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
             Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
-            //Console.WriteLine("hello");
         }
 
         [TestMethod]
@@ -67,7 +76,6 @@ namespace UnitTest
             Assert.AreEqual(int.MaxValue, second.DifferenceToNextOffer);
             Assert.AreEqual("Jonatan@Megamail.com", second.UserID);
             Assert.AreEqual(1, second.Contractor.NumberOfWonType2Offers);
-            //Console.WriteLine("hello");
         }
 
         [TestMethod]
@@ -80,7 +88,6 @@ namespace UnitTest
                 @"C:\Users\krizzmp\Documents\flextrafik\Fynbus\Flexcel_Fynbus\FakeData_Tests\Tester vogntype3\RouteNumbers.csv"
             );
             var selectionController = new SelectionController();
-            //selectionController.SelectWinners();
             selectionController.Start();
 
             ListContainer listContainer = ListContainer.Instance;
@@ -104,6 +111,7 @@ namespace UnitTest
             Assert.AreEqual(2, second.Contractor.NumberOfWonType3Offers);
             Console.WriteLine("hello");
         }
+
         [TestMethod]
         public void MereEnd2BudMedSammePrisTilEnRute_IkkeVindende()
         {
@@ -139,6 +147,7 @@ namespace UnitTest
 
             Console.WriteLine("hello");
         }
+
         [TestMethod]
         public void ManglendeTilbudTilEnRute()
         {
@@ -162,6 +171,7 @@ namespace UnitTest
 
             Assert.Fail();
         }
+
         [TestMethod]
         public void BrugForPrioriteringVedRutenummer()
         {
@@ -185,6 +195,7 @@ namespace UnitTest
 
             Assert.Fail();
         }
+
         [TestMethod]
         public void BrugForPrioriteringVedRutenummerLøsning1()
         {
@@ -210,8 +221,8 @@ namespace UnitTest
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
             Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
             Assert.AreEqual(1, first.RouteNumberPriority);
-
         }
+
         [TestMethod]
         public void BrugForPrioriteringVedRutenummerLøsning1_2()
         {
@@ -237,7 +248,6 @@ namespace UnitTest
             Assert.AreEqual("Jonatan@Megamail.com", first.UserID);
             Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
             Assert.AreEqual(2, first.RouteNumberPriority);
-
         }
     }
 }

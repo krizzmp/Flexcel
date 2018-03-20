@@ -6,10 +6,11 @@ namespace Domain
 {
     public class RouteNumber
     {
-        public RouteNumber(string routeId, string requiredVehicleType)
+        public RouteNumber(string routeId, string requiredVehicleType, float requiredHours = 1)
         {
             RouteId = int.Parse(routeId.Trim());
             RequiredVehicleType = int.Parse(requiredVehicleType.Trim());
+            RequiredHours = requiredHours;
         }
 
         public List<Offer> Offers => ListContainer.Instance.Offers.Where(offer => offer.RouteID == RouteId)
