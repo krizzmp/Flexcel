@@ -6,7 +6,7 @@ using Domain;
 
 namespace DataAccess
 {
-    public class RouteNumberLoader: ILoader
+    public class RouteNumberLoader : ILoader
     {
         private readonly Encoding _encoding;
 
@@ -19,12 +19,12 @@ namespace DataAccess
         {
             try
             {
-                var data = File.ReadAllLines(filepath, _encoding)
+                var routeNumbers = File.ReadAllLines(filepath, _encoding)
                     .Skip(1)
                     .Select(x => x.Split(';'))
-                    .Select(x => new RouteNumber(x[0], x[1]))
+                    .Select(RouteNumberFactory)
                     .Where(rn => rn.RouteId != 0 && rn.RequiredVehicleType != 0);
-                ListContainer.Instance.RouteNumberList = data.ToList();
+                ListContainer.Instance.RouteNumberList = routeNumbers.ToList();
             }
 
 
@@ -36,6 +36,29 @@ namespace DataAccess
             {
                 throw new FormatException("Fejl, er du sikker på du har valgt den rigtige fil?");
             }
+        }
+
+        private RouteNumber RouteNumberFactory(string[] x)
+        {
+            const int weekdaysInWeek = 5;
+            const int weeksInYear = 52;
+            const int weekendDaysInWeek = 2;
+            const int holydaysInYear = 6;
+
+            string routeId = x.ElementAtOrDefault(0);
+            string requiredVehicleType = x.ElementAtOrDefault(1);
+
+            float hoursInWeekday = x.ElementAtOrDefault(2).ParseToFloatElseZero();
+            float hoursInWeekend = x.ElementAtOrDefault(3).ParseToFloatElseZero();
+            float hoursInHolyday = x.ElementAtOrDefault(4).ParseToFloatElseZero();
+            
+            float requiredHours = hoursInWeekday * weekdaysInWeek * weeksInYear + hoursInWeekend * weekendDaysInWeek * weeksInYear + hoursInHolyday * holydaysInYear;
+            if (requiredHours.IsCloseToZero())
+            {
+                requiredHours = 1;
+            }
+
+            return new RouteNumber(routeId, requiredVehicleType, requiredHours);
         }
     }
 }

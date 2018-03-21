@@ -17,6 +17,7 @@ namespace Domain
 
         private ListContainer()
         {
+            // emty private constructor
         }
 
         public static ListContainer Instance { get; } = new ListContainer();

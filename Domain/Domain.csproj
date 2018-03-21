@@ -71,6 +71,7 @@
     <Compile Include="Offer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteNumber.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

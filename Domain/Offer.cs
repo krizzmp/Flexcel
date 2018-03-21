@@ -27,33 +27,11 @@ namespace Domain
             string routeNumberPriority, string contractorPriority)
         {   
             OfferReferenceNumber = offerReferenceNumber;
-            RouteID = ParseToIntElseZero(routeId);
-            _operationPrice = ParseToFloatElseZero(operationPrice);
+            RouteID = Utils.ParseToIntElseZero(routeId);
+            _operationPrice = Utils.ParseToFloatElseZero(operationPrice);
             UserID = userId;
-            RouteNumberPriority = ParseToIntElseZero(routeNumberPriority);
-            ContractorPriority = ParseToIntElseZero(contractorPriority);
+            RouteNumberPriority = Utils.ParseToIntElseZero(routeNumberPriority);
+            ContractorPriority = Utils.ParseToIntElseZero(contractorPriority);
         }
-
-        private static int ParseToIntElseZero(string str)
-        {
-
-            int.TryParse(str.Trim(), out int n);
-            return n;
-        }
-
-        private static float ParseToFloatElseZero(string toParse)
-        {
-            string currentCultureName = Thread.CurrentThread.CurrentCulture.Name;
-            CultureInfo cultureInformation = new CultureInfo(currentCultureName);
-            cultureInformation.NumberFormat.NumberDecimalSeparator = ",";
-            toParse = toParse.Replace(" ", "");
-            float.TryParse(toParse.Replace('.', ','), NumberStyles.Float, cultureInformation, out float n);
-            return n;
-        }
-    }
-
-    public class Price
-    {
-
     }
 }
