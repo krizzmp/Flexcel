@@ -18,8 +18,11 @@ namespace View
         {
             InitializeComponent();
         }
-
-        private void BtnMasterDataFilePathSelect_Click(object sender, RoutedEventArgs e)
+		private void RouteNumberBtn_Click(object sender, RoutedEventArgs e)
+		{
+			TxtBoxFilePathRouteNumbers.Text = _mainWindowViewModel.ChooseCSVFile();
+		}
+		private void BtnMasterDataFilePathSelect_Click(object sender, RoutedEventArgs e)
         {
             TxtBoxFilePathMasterData.Text = _mainWindowViewModel.ChooseCSVFile();
         }
@@ -94,5 +97,5 @@ namespace View
                 MessageBox.Show(x.Message);
             }
         }
-    }
+	}
 }
