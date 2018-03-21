@@ -58,11 +58,15 @@
                VerticalAlignment="Top" />
         <TextBox x:Name="TxtBoxFilePathRouteNumbers"
                  Height="20"
-                 Margin="132,16,180.333,0"
+                 Margin="133,16,180.333,0"
                  TextWrapping="Wrap"
                  Text=""
                  VerticalAlignment="Top" />
-
+        <Button x:Name="RouteNumberBtn"
+                Content="Vælg fil"
+                VerticalAlignment="Top" 
+                Margin="0,16,118.2,0" 
+                Click="RouteNumberBtn_Click" HorizontalAlignment="Right" Width="59"/>
         <Button x:Name="BtnImport"
                 Content="Importer"
                 HorizontalAlignment="Right"
@@ -141,5 +145,6 @@
                Margin="0,0,125.2,35.4"
                VerticalAlignment="Bottom"
                Width="93" />
+
     </Grid>
 </Window>
