@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,17 @@ namespace DataAccess
                 var data = File.ReadAllLines(filepath, _encoding)
                     .Skip(1)
                     .Select((string x) => x.Split(';'))
-                    .Select(x => new Contractor(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]))
+                    .Select(x => {
+                        var vehicleTypes = new Dictionary<int, int> {
+                            {2, int.Parse(x[4].Trim())},
+                            {3, int.Parse(x[5].Trim())},
+                            {5, int.Parse(x[6].Trim())},
+                            {6, int.Parse(x[7].Trim())},
+                            {7, int.Parse(x[8].Trim())}
+                        };
+
+                        return new Contractor(x[0], x[1], x[2], x[3], vehicleTypes);
+                    })
                     .Where(c => c.UserId != "");
                 ListContainer.Instance.ContractorList = data.ToList();
             }

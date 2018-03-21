@@ -57,7 +57,7 @@ namespace Domain
             IEnumerable<Offer> eligibleOffers = Offers.Where(offer => offer.IsEligible).ToList();
             float min = eligibleOffers.Min(offer => offer.OperationPrice);
             IEnumerable<Offer> cheapestOffers =
-                eligibleOffers.Where(offer => Math.Abs(offer.OperationPrice - min) < 0.001).ToList();
+                eligibleOffers.Where(offer => (offer.OperationPrice - min).IsCloseToZero()).ToList();
             foreach (Offer cheapestOffer in cheapestOffers)
             {
                 cheapestOffer.Win = true;
@@ -84,15 +84,6 @@ namespace Domain
                     throw new ApplicationException("multiple winners");
                 }
             }
-        }
-    }
-
-    static class Extra
-    {
-        public static IEnumerable<Offer> MaxAll(this IEnumerable<Offer> enumerable)
-        {
-            var offers = enumerable.ToList();
-            return offers.Where(x => x.RouteNumberPriority == offers.Max(arg => arg.RouteNumberPriority));
         }
     }
 }

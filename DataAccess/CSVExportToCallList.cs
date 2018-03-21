@@ -53,16 +53,16 @@ namespace DataAccess
                                 $"{offer.OfferReferenceNumber};" +
                                 $"{offer.Contractor.CompanyName};" +
                                 $"{offer.Contractor.ManagerName};" +
-                                $"{offer.Contractor.NumberOfType2PledgedVehicles};" +
-                                $"{offer.Contractor.NumberOfType3PledgedVehicles};" +
-                                $"{offer.Contractor.NumberOfType5PledgedVehicles};" +
-                                $"{offer.Contractor.NumberOfType6PledgedVehicles};" +
-                                $"{offer.Contractor.NumberOfType7PledgedVehicles};" +
-                                $"{offer.Contractor.NumberOfWonType2Offers};" +
-                                $"{offer.Contractor.NumberOfWonType3Offers};" +
-                                $"{offer.Contractor.NumberOfWonType5Offers};" +
-                                $"{offer.Contractor.NumberOfWonType6Offers};" +
-                                $"{offer.Contractor.NumberOfWonType7Offers}"
+                                $"{offer.Contractor.VehicleTypes[2]};" +
+                                $"{offer.Contractor.VehicleTypes[3]};" +
+                                $"{offer.Contractor.VehicleTypes[5]};" +
+                                $"{offer.Contractor.VehicleTypes[6]};" +
+                                $"{offer.Contractor.VehicleTypes[7]};" +
+                                $"{offer.Contractor.NumberOfWonOffersOfType(2)};" +
+                                $"{offer.Contractor.NumberOfWonOffersOfType(3)};" +
+                                $"{offer.Contractor.NumberOfWonOffersOfType(5)};" +
+                                $"{offer.Contractor.NumberOfWonOffersOfType(6)};" +
+                                $"{offer.Contractor.NumberOfWonOffersOfType(7)}"
                             );
                         }
                     }

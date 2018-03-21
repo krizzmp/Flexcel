@@ -65,11 +65,11 @@ namespace View
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            Environment.Exit(1);
-        }
+        //protected override void OnClosing(CancelEventArgs e)
+        //{
+        //    base.OnClosing(e);
+        //    Environment.Exit(1);
+        //}
 
         private void BtnSavePublic_Click(object sender, RoutedEventArgs e)
         {

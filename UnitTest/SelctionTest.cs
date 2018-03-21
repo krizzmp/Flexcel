@@ -14,19 +14,21 @@ namespace UnitTest
         public void TestMed3BudTilSammeRute()
         {
             var data = new List<Contractor> {
-                new Contractor("16-1", "Jakob", "Jakobs Virksomhed", "Jakob@supermail.com", "3", "1", "0", "0", "10"),
-                new Contractor("16-2", "Jonatan", "Jonatans Virksomhed", "Jonatan@Megamail.com", "5", "5", "5", "5", "5")
+                new Contractor("16-1", "Jakob", "Jakobs Virksomhed", "Jakob@supermail.com",
+                    new Dictionary<int, int>() {{2, 3}, {3, 1}, {5, 0}, {6, 0}, {7, 10}}),
+                new Contractor("16-2", "Jonatan", "Jonatans Virksomhed", "Jonatan@Megamail.com",
+                    new Dictionary<int, int>() {{2, 5}, {3, 5}, {5, 5}, {6, 5}, {7, 5}})
             };
             ListContainer.Instance.ContractorList = data;
             var data2 = new List<Offer> {
-                new Offer("1-001", "1", "150","Jakob@supermail.com","", ""),
-                new Offer("2-001", "1", "155","Jonatan@Megamail.com","", ""),
-                new Offer("2-002", "1", "155","Jonatan@Megamail.com","", ""),
-                };
+                new Offer("1-001", "1", "150", "Jakob@supermail.com", "", ""),
+                new Offer("2-001", "1", "155", "Jonatan@Megamail.com", "", ""),
+                new Offer("2-002", "1", "155", "Jonatan@Megamail.com", "", ""),
+            };
             ListContainer.Instance.Offers = data2;
 
             var data3 = new List<RouteNumber> {
-                new RouteNumber("1","2")
+                new RouteNumber("1", "2")
             };
             ListContainer.Instance.RouteNumberList = data3;
             var selectionController = new SelectionController();
@@ -42,7 +44,7 @@ namespace UnitTest
             Assert.AreEqual(2, first.RequiredVehicleType);
             Assert.AreEqual(5, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
-            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonOffersOfType(2));
         }
 
         [TestMethod]
@@ -67,7 +69,7 @@ namespace UnitTest
             Assert.AreEqual(2, first.RequiredVehicleType);
             Assert.AreEqual(5, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
-            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonOffersOfType(2));
 
             Offer second = outputListByUserId[1];
             Assert.AreEqual(155, second.OperationPrice);
@@ -75,7 +77,7 @@ namespace UnitTest
             Assert.AreEqual(2, second.RequiredVehicleType);
             Assert.AreEqual(int.MaxValue, second.DifferenceToNextOffer);
             Assert.AreEqual("Jonatan@Megamail.com", second.UserID);
-            Assert.AreEqual(1, second.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, second.Contractor.NumberOfWonOffersOfType(2));
         }
 
         [TestMethod]
@@ -100,7 +102,7 @@ namespace UnitTest
             Assert.AreEqual(3, first.RequiredVehicleType);
             //Assert.AreEqual(1, first.DifferenceToNextOffer);
             Assert.AreEqual("Jonatan@Megamail.com", first.UserID);
-            Assert.AreEqual(2, first.Contractor.NumberOfWonType3Offers);
+            Assert.AreEqual(2, first.Contractor.NumberOfWonOffersOfType(3));
 
             Offer second = outputListByUserId[1];
             //Assert.AreEqual(149, second.OperationPrice);
@@ -108,7 +110,7 @@ namespace UnitTest
             Assert.AreEqual(3, second.RequiredVehicleType);
             //Assert.AreEqual(1, second.DifferenceToNextOffer);
             Assert.AreEqual("Jonatan@Megamail.com", second.UserID);
-            Assert.AreEqual(2, second.Contractor.NumberOfWonType3Offers);
+            Assert.AreEqual(2, second.Contractor.NumberOfWonOffersOfType(3));
         }
 
         [TestMethod]
@@ -133,7 +135,7 @@ namespace UnitTest
             Assert.AreEqual(2, first.RequiredVehicleType);
             Assert.AreEqual(1, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob3@supermail.com", first.UserID);
-            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonOffersOfType(2));
             Assert.AreEqual("4-001", first.OfferReferenceNumber);
 
             List<Offer> offers = listContainer.RouteNumberList[0].Offers;
@@ -218,7 +220,7 @@ namespace UnitTest
             Assert.AreEqual(2, first.RequiredVehicleType);
             Assert.AreEqual(int.MaxValue, first.DifferenceToNextOffer);
             Assert.AreEqual("Jakob@supermail.com", first.UserID);
-            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonOffersOfType(2));
             Assert.AreEqual(1, first.RouteNumberPriority);
         }
 
@@ -245,7 +247,7 @@ namespace UnitTest
             Assert.AreEqual(2, first.RequiredVehicleType);
             Assert.AreEqual(int.MaxValue, first.DifferenceToNextOffer);
             Assert.AreEqual("Jonatan@Megamail.com", first.UserID);
-            Assert.AreEqual(1, first.Contractor.NumberOfWonType2Offers);
+            Assert.AreEqual(1, first.Contractor.NumberOfWonOffersOfType(2));
             Assert.AreEqual(2, first.RouteNumberPriority);
         }
     }
